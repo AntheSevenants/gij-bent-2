@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  rstudio:
+    image: "anthesevenants/gij-bent-2:rstudio"
+    ports: 
+      - 8787:8787
+      - 8788:8788
+    environment:
+      DISABLE_AUTH: true
+    volumes:
+      - .:/home/rstudio/gij-bent-2/:Z
