@@ -14,8 +14,7 @@ source("0-common.R")
 # Create an ElasticTools dataset
 ds <- dataset(df=df,
               response_variable_column="construction_type",
-              to_binary_columns=c("user_id", "dialect", "gender"),
-              other_columns=c("distance_from_antwerp", "is_reply"))
+              to_binary_columns=c("user_id"))
 
 # Get the list of features
 # In our case, this is the list of users
@@ -38,7 +37,7 @@ coefficients_with_labels <- net$attach_coefficients(
   output$fits[[lowest_loss_row[["X_id"]]]])
 
 # Export
-write.csv(coefficients_with_labels, "../output/gij_bent_coefficients.csv",
+write.csv(coefficients_with_labels, "../output/gij_bent_coefficients_bare.csv",
           row.names=FALSE)
 
 #
@@ -55,4 +54,4 @@ for (attribute in colnames(lowest_loss_row)) {
   model_meta$add_model_information(attribute, lowest_loss_row[[attribute]])
 }
 
-write.csv(model_meta$as.data.frame(), "../output/model_meta.csv", row.names=FALSE)
+write.csv(model_meta$as.data.frame(), "../output/model_meta_bare.csv", row.names=FALSE)
