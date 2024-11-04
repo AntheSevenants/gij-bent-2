@@ -4,3 +4,5 @@
 .Ruserdata
 
 tweets_geo.tsv
+output/
+data/
