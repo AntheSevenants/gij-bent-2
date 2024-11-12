@@ -1,0 +1,81 @@
+---
+title: "gij bent 2"
+author:
+  - name: Anthe Sevenants
+    email: anthe.sevenants@kuleuven.be
+    orcid: 0000-0002-5055-770X
+    affiliations:
+      - name: KU Leuven
+  - name: Julie Nijs
+    email: julie.nijs@kuleuven.be
+    orcid: 000-0002-7421-9887
+    affiliations:
+      - name: KU Leuven
+format:
+  html:
+    toc: true
+  docx:
+    toc: false
+editor: source
+title-block-banner: true
+bibliography: references.bib
+toc: true
+toc-depth: 4
+toc-location: left
+tbl-cap-location: bottom
+fig-cap-location: bottom
+number-sections: true
+reference-location: margin
+csl: chicago-author-date.csl
+df-print: kable
+abstract: |
+  TODO
+execute:
+  echo: false
+---
+
+```{r initialisation}
+#| output: false
+library(scales)
+
+formatn <- function(number) {
+    format(round(as.numeric(number), 1), nsmall=0, big.mark=",")
+}
+
+formatd <- function(number, nsmall=2) {
+    format(round(number, nsmall), nsmall=nsmall)
+}
+
+formatp <- function(number) {
+    label_percent()(number)
+}
+
+suppress_gloss <- FALSE
+```
+
+## Introduction {#sec:introduction}
+
+One of the key ideas from usage-based linguistics is that language is not a system that exists just "by itself". Rather, it is widely accepted within this branch that language arises out of the many interactions that language users have with each other [TODO source]. As such, language becomes a "complex-adaptive system" [TODO source], a system without a single authoritative control, constructed through the simple yet numerous interactions of its components, language users. While each speaker of a language (be it Dutch, English or Maori) has their own personalised representation of the rules and constraints that they think make up that language, these representations have enough in common in order to warrant talking about a shared "code", or more broadly, a language.
+
+When it comes to research of said shared code, things become more complicated. It is impossible for researchers to know the complete code of *all* language users in a language system. This situation forces models of language into necessary generalisations. Generalisation is a valid strategy, as most linguistic variation, when tallied at large, will lead to a Zipfian A-curve [as suggested by Kretzschmar, TODO]. The make-up of this curve, with the most popular forms capturing most of the language use anyway, make it so the "general" behaviour of language variation that is typically captured in corpora also represents a fair share of what would be the individual code of most language users. Of course, there are factors influencing what language forms are used,[^lects] but broadly speaking, this generalisation holds. We see this, for example, in probabilistic grammar, [todo definition]. Still, on a theoretical level, it is regrettable that models of variation do not start from the lowest common denominator of this variation: the language user.
+
+[^lects]: i.e. "lects", TODO Geeraerts
+
+Contrastively, the advent of social media offers a unique opportunity for variationist research. Social media platforms offer an insight into the language systems of a large number of people.  Whereas previously it was possible to gauge the linguistic profile of only a small group of people [e.g. Milroy, Labov], social media offer linguistic variation at an unprecedented scale.[^c-clamp] While one should not consider spoken and written social media as equivalent, social media language has nonetheless proven a useful proxy for the former [TODO source]. In addition, social media data of course do not provide access to *all* of language for *all* users of a language system; not all utterances are made on social media, nor are all language users active on social media platforms. Nevertheless, social media platforms bring us closer to the idea of studying language *inside out*, starting from individual language users' variation, even if it is only for a single alternation among a subset of language users. This brings us to the first research question of this study:
+
+1. What affordances does a focus on individual variation bring us in the context of alternation research, especially in contrast to traditional, aggregated alternation research?
+
+[^c-clamp]: More recently, the release of the C-Clamp corpus [todo] offers a diachronic insight into the language use of Dutch-speaking writers from XXX to XXX. The historical nature of this corpus, however, limits its use for research into contemporary language variation phenomena.
+
+Another aspect of of the complex-adaptive system of language are the connections between people. Humans are embedded in larger social networks, which are formed according to a so-called "power law". [uitleg scale-free netwerk]
+Linguistically, the effects of networks has been studied before [stuk Julie].
+
+- leaders / loaners
+- gedrag van centrale figuren
+- alle andere dingen die interessant zouden kunenn zijn
+
+Except for small-scale studies [e.g. Milroy & Labov TODO], it has been impossible to get an elaborate insight into the social relationships of people on a large scale, let alone how these relationships relate to language. Again, social media offer an opportunity here. While it is not practical to get a full network of *all* social media users, we *can* get information on how "connected" a particular user is. Through metrics like "followers" and "following", we know how many connections social media users have. This allows us to get an idea of the centrality of a user in the larger social media network, even if we do not know the full network itself. This brings us to the second research question in this study:
+
+2. How can we leverage the implicit network inherent in social media data to learn more about the spread of linguistic innovations?
+
+To answer the two research questions stated above, we follow up on a study by Sevenants [TODO] about *gij bent*, a linguistic innovation concerning the second person of 'to be' in Colloquial Belgian Dutch (CBD). To compute the individual variation of different language users, we will use elastic net regression, a regression analysis technique pioneered in [todo]. First, we will introduce the *gij bent* CBD linguistic innovation. Then, we will describe how we modelled the linguistic profiles of the individual user with regard to this innovation using elastic net, and why we need this specific technique to answer the questions we have in this study. Next, we will show the results of our analyses, and discuss what consequences they have for usage-based alternation research in general.
