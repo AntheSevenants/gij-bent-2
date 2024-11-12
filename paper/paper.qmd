@@ -92,3 +92,20 @@ At the start of the 21^st century, it had become clear that Flanders was evolvin
 
 The new variant CBD is characterised by being hard to define. In general, it is best described as a "standard-adjacent", colloquial form of Belgian Standard Dutch, with both general Flemish elements and region-specific features added to it on all levels (phonology, morphology, syntax etc.). The presence of region-specific features means that CBD is not a monolithic language variety, but rather sounds different across all places in Flanders. This inherent variability is intrinsic to its linguistic identity, but frustrating to linguists, who have been trying to come up with "defining features" for decades [todo citaties Zenner].
 
+### *gij bent*
+
+Traditionally in Flanders, if one wishes to say "you are" in an informal way, they would say *gij zijt*. *Gij* marks the informal second person pronoun that is typical to most Flemish dialects. *Zijt* is a historic form of *zijn* 'to be' that is now exclusively used with this pronoun. If one wanted to say "you are" in a formal way (i.e. in standard language), they would say *jij bent*. *Jij* marks the non-polite, yet formal second person pronoun in Flanders. *Jij* is more formal than *gij* because the *jij* pronoun is actually a Netherlandic form that, because it is foreign, has a different status than *gij*. *Bent* is the conjugated form that goes along with *jij*. It is also imported from the Netherlands.
+
+It is clear, then, that these two forms are distinctly different from each other. However, in CBD, a blend of these two forms has appeared: *gij bent*. It combines the *gij* pronoun from *gij zijt* with the *bent* conjugation known from standard language. *Gij bent* is a quite literal example of the diaglossia situation, as it combines *gij* and *bent* from polar opposites of the language spectrum and meets somewhere in the middle.
+
+Research by [mezelf lol TODO] has shown that *gij bent* most likely originated in dialects from the northern Antwerp province in Flanders, and then spread to other parts of the Brabantian dialect area.[^brabants] The reason for the spread from this area is argued to lie in the function of *gij bent*. The *jij bent* from standard language might feel too formal, while the *gij zijt* from dialects might feel too blunt. *Gij bent* strikes a balance between the two: it has colloquial roots through Flemish *gij*, but benefits from the prestige associated with standard language [todo referentie] through standard *bent*. In addition, both regional, formality and gender effects were found:
+
+1. the use of *gij bent* is limited to the Brabant dialect region only
+2. the use of *gij bent* is less likely in more informal contexts
+3. the use of *gij bent* is more likely for women
+
+[^brabants]: Brabants is the dialect area coinciding, mostly, with the Flemish provinces "Vlaams-Brabant" and "Antwerp". It is said to be the driving force behind CBD, but this claim is disputed [todo Lybaert reference].
+
+While these conclusions are drawn from language use originating from social media, the analysis itself is very traditional. As in a standard corpus linguistic study, it generalises over all language at once, as well as all language users. This leads to blanket statements as the ones above. As argued before, there is nothing inherently wrong with this approach, but given the opportunities in social media data, a more bottom-up approach would be interesting. More specifically, such an approach would allow us to detect whether certain language users behave differently from what we would expect given their location or gender. These deviations from general expectations are now invisible in the generalising models. In addition, no account was taken of the network structure hidden in the data, which might reveal more about the forces and the direction this innovation will take in the future.
+
+### Elastic net regression
