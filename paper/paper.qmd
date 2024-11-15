@@ -53,6 +53,29 @@ formatp <- function(number) {
 suppress_gloss <- FALSE
 ```
 
+
+
+```{r load-coefficients}
+#| output: false
+
+# Load the dataset
+source("../analysis/0-common.R")
+
+coefficients_full <- read.csv("../output/gij_bent_coefficients_two_genders.csv")
+
+coefficients <- merge(x = coefficients_full %>% subset(substr(feature, 1, 1) != "_"),
+               y = df %>% one_user_one_tweet,
+               by.x = "feature",
+               by.y = "user_id",
+               all.x = TRUE)
+coefficients$log_followers = log(coefficients$user_followers_count)
+coefficients$log_following = log(coefficients$user_friends_count)
+coefficients$log_tweet_count = log(coefficients$user_tweet_count)
+coefficients$influence = log((coefficients$user_followers_count + 0.001) / (coefficients$user_friends_count + 0.001))
+
+```
+
+
 ## Introduction {#sec:introduction}
 
 One of the key ideas from usage-based linguistics is that language is not a system that exists just "by itself". Rather, it is widely accepted within this branch that language arises out of the many interactions that language users have with each other [TODO source]. As such, language becomes a "complex-adaptive system" [TODO source], a system without a single authoritative control, constructed through the simple yet numerous interactions of its components, language users. While each speaker of a language (be it Dutch, English or Maori) has their own personalised representation of the rules and constraints that they think make up that language, these representations have enough in common in order to warrant talking about a shared "code", or more broadly, a language.
@@ -122,7 +145,7 @@ In order to operationalise this computation of individual variation, we made use
 
 In addition, elastic net leverages "k-fold cross validation". This technique divides the data into several parts and iteratively uses different parts for training and testing the regression model. This practice also contributes towards general robustness and the prevention of overfitting. K-fold cross validation allows us to have hundreds of predictors in a single analysis, which is a useful property when we want to track a multitude of language users at the same time. Such a thing would be impossible with a regular regression analysis on the basis of mathematical intractability (i.e. with mixed models). For additional details on elastic net regression for linguistics, see [mezelf geaccepteerd leuk].
 
-In general, then, elastic net regression lends itself nicely to research into individual variation. With elastic net, we estimated coefficients for each language user separately by treating those language users as individual predictors. Because we also included all the predictors from [sevenants todo] in our analysis, these more general predictors (gender, dialect region, distance from northern Antwerp, formality) form the "expectation" for each specific speaker. Due to the multifactorial control characteristic[^multifactoriality] of regression analysis, this makes it so each individual speaker's coefficient becomes a measure of the variation that is not explained on the basis of the more general predictor terms, i.e. the individual deviation or variation we expressed our desire for in the previous sections.
+In general, then, elastic net regression lends itself nicely to research into individual variation. With elastic net, we modelled the presence of either *zijt* (conservative) or *bent* (innovative) as a logistic response variable. In our model, we estimated coefficients for each language user separately by treating those language users as individual predictors. Because we also included all the predictors from [sevenants todo] in our analysis, these more general predictors (gender, dialect region, distance from northern Antwerp, formality) form the "expectation" for each specific speaker. Due to the multifactorial control characteristic[^multifactoriality] of regression analysis, this makes it so each individual speaker's coefficient becomes a measure of the variation that is not explained on the basis of the more general predictor terms, i.e. the individual deviation or variation we expressed our desire for in the previous sections.
 
 [^multifactoriality]: Multifactorial control means that the analysis takes all predictors into account at the same time. This guarantees that variation due to one predictor is not assumed to stem from another.
 
@@ -139,3 +162,43 @@ For an overview of all predictors included in our model, see @tbl-predictors.
 : An overview of all predictors which will be used in the elastic net regression. Predictors marked with \* receive separate predictors for each level (for example, separate predictors for each tweet author).  {#tbl-predictors}
 
 For our analysis, we used ElasticToolsR [todo mezelf], a package for the R language [todo] which simplifies running elastic net regression models.
+
+## Results
+
+In this section, we will go over the results produced by our elastic net regression model. We will  first look at the predictors included in the previous study to ensure our model produces comparable results. Then, we will dive into the predictors describing the behaviour of the individual language users.
+
+### Controlling predictors
+
+@tbl-other-coefficients gives an overview of the "control" coefficients that were included in order to have multifactorial control for the individual variation. Since the innovative *bent* variant was encoded as outcome "1", and the innovative *zijt* was encoded as outcome "0", positive coefficients mean a a correction towards the innovative variant, while negative corrections mean a correction towards the conservative variant. These corrections must be interpreted from the situation expressed in the intercept, a "reference situation" that is defined as follows:
+
+- formal situation (no reply or interaction)
+- at distance "0" from northern Antwerp
+
+In general, the results are comparable to those from [mezelf]. The innovative *gij bent* is more popular in the Brabant dialect area (positive correction), and less popular in the other areas (negative corrections). We even see the same anomaly for the West-Flemish dialect area[^anomaly]. *gij bent* becomes less popular as we move away from northern Antwerp, and more informal tweets also correct towards the conservative *gij zijt* (albeit very slightly, todo). Compared to [mezelf todo], some predictors have more subtle effects. We assume these differences stem from (i) the coefficient attenuation from the elastic net penalty (ii) a difference in dataset size -- [mezelf todo] used only one tweet per user because of issues with random effects, which we sidestep by using elastic net regression (iii) parts of the variation attributed to other predictors in [mezelf todo] will now be attributed to individual variation.
+
+[^anomaly]: The results for the West-Flemish dialect area need to be interpreted in conjunction with the "distance from northern Antwerp" parameter. The regression analysis assumes a zero distance from Antwerp from the intercept, but this does not make sense for dialect areas other than Brabant. Therefore, if we apply the extra corrections expressed in "distance from northern Antwerp", we get the expected negative correction towards the conservative form (`r 121 * -0.017`). Still, the *gij* pronoun is quite rare in this area, so the West-Flemish results should be treated with caution.
+
+```{r #tbl-other-coefficients}
+# All other coefficients start with an underscore
+other_coefficients <- coefficients_full[coefficients_full$feature %>% substr(1,1) == "_",]
+# Change "removed" to "retained"
+other_coefficients$retained = ifelse(other_coefficients$coefficient == 0, "no", "yes")
+# Friendly names
+other_coefficients$feature <- gsub("_(.+)", "\\1", other_coefficients$feature)
+other_coefficients$feature <- gsub("(is|_)", " ", other_coefficients$feature)
+other_coefficients$predictor <- other_coefficients$feature
+other_coefficients$coefficient <- other_coefficients$coefficient %>% formatd(3)
+# Only keep interesting columns
+other_coefficients <- other_coefficients[, names(other_coefficients) %in% c("coefficient", "predictor", "retained")]
+# Re-order
+other_coefficients <- other_coefficients[,c(3, 1, 2)]
+# Sort
+other_coefficients$coefficient <- as.numeric(other_coefficients$coefficient)
+other_coefficients <- other_coefficients[order(other_coefficients$coefficient,
+                                               decreasing=TRUE),]
+# Remove row indices
+rownames(other_coefficients) <- NULL
+# Output to document
+other_coefficients
+```
+
