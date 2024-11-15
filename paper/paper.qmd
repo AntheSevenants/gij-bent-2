@@ -202,3 +202,16 @@ rownames(other_coefficients) <- NULL
 other_coefficients
 ```
 
+### Individual variation
+
+[density plot]
+
+[violin plots]
+
+[profiles: most extreme corrections per author]
+
+[regression analysis]
+
+[network effect explanation]
+
+## Conclusion
