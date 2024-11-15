@@ -12,7 +12,7 @@ source("0-common.R")
 
 
 # Create an ElasticTools dataset
-ds <- dataset(df=df,
+ds <- dataset(df=df %>% no_unknown_gender(),
               response_variable_column="construction_type",
               to_binary_columns=c("user_id", "dialect", "gender"),
               other_columns=c("distance_from_antwerp", "is_reply"))
