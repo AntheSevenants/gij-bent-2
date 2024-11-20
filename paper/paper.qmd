@@ -37,6 +37,7 @@ execute:
 ```{r initialisation}
 #| output: false
 library(scales)
+library(ggplot2)
 
 formatn <- function(number) {
     format(round(as.numeric(number), 1), nsmall=0, big.mark=",")
@@ -169,7 +170,7 @@ For our analysis, we used ElasticToolsR [todo mezelf], a package for the R langu
 
 In this section, we will go over the results produced by our elastic net regression model. We will  first look at the predictors included in the previous study to ensure our model produces comparable results. Then, we will dive into the predictors describing the behaviour of the individual language users.
 
-### Controlling predictors
+### Controlling predictors {#sec-controlling-predictors}
 
 @tbl-other-coefficients gives an overview of the "control" coefficients that were included in order to have multifactorial control for the individual variation. Since the innovative *bent* variant was encoded as outcome "1", and the innovative *zijt* was encoded as outcome "0", positive coefficients mean a a correction towards the innovative variant, while negative corrections mean a correction towards the conservative variant. These corrections must be interpreted from the situation expressed in the intercept, a "reference situation" that is defined as follows:
 
@@ -206,9 +207,52 @@ other_coefficients
 
 ### Individual variation
 
-[density plot]
+In this section, we will go over the coefficients that were computed for each language user. We will first look at the variation patterns globally, and then zoom in on the differences between different groups of language users. We will also attempt to model the coefficients in order to find relations between them.
+
+#### Global variation pattern
+
+First, we will look at the coefficient globally. The density plot of the variation coefficients in @fig-general-density gives a global overview of the how each language user "deviates" from what is expected given their gender, location etc.. Negative coefficients on the left side of the plot show deviations of individual language users towards the conservative *gij zijt*. Positive coefficients on the right side of the plot show deviations of individual language users towards the innovative *gij bent*. The middle dotted line marks the zero coefficient, i.e. those who do not deviate from the expected norm. We see that there is a bi-modal distribution in the variation coefficients. The first distribution shows many slights corrections towards the conservative form (first bump). The second distribution shows a smaller number of larger corrections towards the innovative form (second bump). This bi-modal variation pattern would have remained invisible in a more traditional regression model.
+
+Note that each of the two different distributions might not consist of a homogeneous type of people. For example, the innovative corrections might include people in regions where the innovative form is rarely used, and who use the innovative form nonetheless. At the same time, innovative corrections might also stem from people in an already innovative area who "out-innovate" the expectations, using the innovative form even more often than is expected. We will attempt to build profiles of each correction direction later TODO. 
+
+```{r #fig-general-density}
+#| fig-cap: A density plot describing the individual variation coefficients in our dataset. The left side of the plot (negative coefficients) shows corrections towards the conservative form, the right side of the plot (positive coefficients) shows corrections towards the innovative form.
+coefficients %>%
+  ggplot(aes(x = coefficient)) +
+  geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.5) +
+  geom_vline(xintercept=0, color="black", linewidth=1, linetype="dotdash")
+```
+
+#### Variation patterns among groups
+
+Next, we will look at the patterns of variation among different groups. @fig-gender-violin shows the distribution of variation coefficients between men and women. Interestingly, we see patterns that "reverse" the known patterns from [mezelf todo] and @sec-controlling-predictors: men correct towards the innovative variant, women correct towards the conservative variant. This makes sense: of course, though there are general trends that dictate a certain preference for men or women, this does not mean that *all* individuals from that group follow that same pattern. This is what we see in our plots of individual variation. There are ample outliers who deviate from what is typically expected from their gender, and this also highlights that we need to be cautious when making generalisations in this regard.
+
+```{r #fig-gender-violin}
+#| fig-cap: A violin plot describing the individual variation coefficients for men and women. A wider figure means more data for that y value.
+coefficients %>%
+  ggplot(aes(x = gender, y = coefficient, fill = gender)) +
+  geom_violin() +
+  geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
+```
+
+
+@fig-region-violin shows the dispersion of variation by Flemish dialect region. Here, we do not see a "reverse" pattern, in contrast to @fig-gender-violin. The Brabant dialect shows individual variation which is comparable both for innovative and conservative variants, whereas the other dialects gravitate towards more conservative corrections. We see that there are innovators in all three non-Brabant regions, but they are generally few. Maybe these are near border-regions? TODO
+
+```{r #fig-region-violin}
+#| fig-cap: A violin plot describing the individual variation coefficients by region. A wider figure means more data for that y value.
+coefficients %>%
+  ggplot(aes(x = dialect, y = coefficient, fill = dialect)) +
+  geom_violin() +
+  geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
+```
+
+Just from this general overview, we see that there are patterns among the variation. Though speakers are of course free to use whatever forms they want, how they deviate from expectations is not random.
 
 [violin plots]
+
+### Profile analysis
+
+
 
 [profiles: most extreme corrections per author]
 
