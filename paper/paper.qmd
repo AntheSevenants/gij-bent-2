@@ -236,7 +236,7 @@ coefficients %>%
 ```
 
 
-@fig-region-violin shows the dispersion of variation by Flemish dialect region. Here, we do not see a "reverse" pattern, in contrast to @fig-gender-violin. The Brabant dialect shows individual variation which is comparable both for innovative and conservative variants, whereas the other dialects gravitate towards more conservative corrections. We see that there are innovators in all three non-Brabant regions, but they are generally few. Maybe these are near border-regions? TODO
+@fig-region-violin shows the dispersion of variation by Flemish dialect region. Here, we do not see a "reverse" pattern, in contrast to @fig-gender-violin.  There seem to be two variation profiles: a Brabant and a non-Brabant variation profile. The Brabant dialect shows individual variation which is comparable both for innovative and conservative variants. In the three non-Brabant regions, we see that there are some innovators, but they are generally few -- the dialects gravitate towards more conservative corrections.
 
 ```{r #fig-region-violin}
 #| fig-cap: A violin plot describing the individual variation coefficients by region. A wider figure means more data for that y value.
@@ -246,7 +246,15 @@ coefficients %>%
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
 
-Just from this general overview, we see that there are patterns among the variation. Though speakers are of course free to use whatever forms they want, how they deviate from expectations is not random.
+One might wonder whether the few innovators that do appear in the plots are perhaps those that live close to the border in their specific dialect regions, and are therefore "atypically" innovative for their region. To study this, we built a Generalised Additive Model or GAM [todo ref]. A GAM can fit smooth curves to "wavy" data. If extrapolated to two dimensions, it allows one to create "weatherman-like" heatmaps for linguistic data. In this case, we modelled the elastic net coefficients on the basis of the latitude and longitude values associated with the places in the profiles of the Twitter users, according to the following equation:
+
+todo equation
+
+We will immediately shift towards the visual interpretation of the GAM in TODO. Dark blue colours show corrections towards the conservative variant, whereas light yellow colours show corrections towards the innovative variant. Beware to keep in mind, however, that these corrections are to be interpreted against the expected behaviour in that specific dialect region. In the GAM plot, we see that the northern Antwerp region is specifically innovative in contrast to an already innovative dialect region, Brabant. This is expected from the results by [mezelf todo]. What is especially interesting given our interest in the innovators in the non-Brabant regions, is that we indeed see that areas closer to the Brabant border show corrections that tend more towards the innovative variant. In addition, we also see that there seems to be an additional horizontal diffusion pattern, where the more innovative variant seems to spread from east to west in the east and from west to east in the west. This pattern remained invisible in the original study by [mezelf todo]. Computer simulations have shown that border-adjacent speakers can play an important role as gatekeepers of innovations, since their hybrid identity can form a "bridge" through which innovations can be passed on [todo OOK mezelf]. In a sense, the horizontal positive variation coefficient pattern shows the pathway that *gij bent* might take in the future in order to break through in these other dialect regions.
+
+TODO figure
+
+In general, then, we see that there are two trends in the variation coefficients. Firstly, for gender, we see a "reversal" pattern, where typical behaviour is not shared across the entire gender group. Secondly, we see a wave-like [todo wave linguistics] horizontal diffusion pattern in the non-Brabant dialect regions, even in regions which, in the general analysis, are thought to be rather conservative. Though speakers are of course free to use whatever forms they want, how they deviate from expectations is not random. 
 
 [violin plots]
 
