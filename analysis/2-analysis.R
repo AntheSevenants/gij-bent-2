@@ -100,7 +100,7 @@ fanatic_bent_user <- coeff[which.max(coeff$coefficient),]
 # Analysis
 #
 
-fit <- lm(coefficient ~ influence + dialect + gender, data=coeff %>% no_unknown_gender())
+fit <- lm(coefficient ~ influence + dialect + gender + distance_from_antwerp, data=coeff %>% no_unknown_gender())
 summary(fit)
 
 posthoc <- emmeans(fit,
