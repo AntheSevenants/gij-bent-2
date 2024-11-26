@@ -8,7 +8,7 @@ source("0-common.R")
 # Plots
 #
 
-coeff <- read.csv("../output/gij_bent_coefficients.csv")
+coeff <- read.csv("../output/gij_bent_coefficients_two_genders.csv")
 
 coeff <- merge(x = coeff %>% subset(substr(feature, 1, 1) != "_"),
                y = df %>% one_user_one_tweet,
