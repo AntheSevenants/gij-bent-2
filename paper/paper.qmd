@@ -193,6 +193,8 @@ other_coefficients$feature <- gsub("(dialect_)", "dialect: ", other_coefficients
 other_coefficients$feature <- gsub("(gender_)", "gender: ", other_coefficients$feature)
 other_coefficients$feature <- gsub("(reply_)", "reply: ", other_coefficients$feature)
 other_coefficients$feature <- gsub("(is_)", " ", other_coefficients$feature)
+other_coefficients$feature <- gsub("(_)", " ", other_coefficients$feature)
+other_coefficients$feature <- gsub("(antwerp)", "Antwerp (km)", other_coefficients$feature)
 other_coefficients$predictor <- other_coefficients$feature
 other_coefficients$coefficient <- other_coefficients$coefficient %>% formatd(3)
 # Only keep interesting columns
