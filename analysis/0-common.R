@@ -25,6 +25,7 @@ df$gender <- factor(df$gender,
 
 # If a user is mentioned in the tweet, we consider it a "reply"
 df$is_reply <- df$mentioned_users_count > 0
+df$is_reply <- ifelse(df$is_reply, "reply", "no_reply")
 # Has to be turned into a factor to work in some plots
 df$is_reply <- as.factor(df$is_reply)
 
@@ -48,5 +49,9 @@ one_user_one_tweet <- function(df) {
 }
 
 no_unknown_gender <- function(df) {
-  subset(df, gender != "_is_gender_unknown")
+  df <- subset(df, gender != "_is_gender_unknown")
+  df$gender <- ifelse(df$gender == "_is_gender_male", "male", "female")
+  df$gender <- factor(df$gender, levels = c("male", "female"))
+  return(df)
 }
+
