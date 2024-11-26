@@ -190,6 +190,8 @@ other_coefficients$retained = ifelse(other_coefficients$coefficient == 0, "no", 
 # Friendly names
 other_coefficients$feature <- gsub("_(.+)", "\\1", other_coefficients$feature)
 other_coefficients$feature <- gsub("(dialect_)", "dialect: ", other_coefficients$feature)
+other_coefficients$feature <- gsub("(gender_)", "gender: ", other_coefficients$feature)
+other_coefficients$feature <- gsub("(reply_)", "reply: ", other_coefficients$feature)
 other_coefficients$feature <- gsub("(is_)", " ", other_coefficients$feature)
 other_coefficients$predictor <- other_coefficients$feature
 other_coefficients$coefficient <- other_coefficients$coefficient %>% formatd(3)
