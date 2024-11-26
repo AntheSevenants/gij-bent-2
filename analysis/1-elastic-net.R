@@ -10,12 +10,11 @@ source("ElasticToolsR/MetaFile.R")
 # Load the dataset
 source("0-common.R")
 
-
 # Create an ElasticTools dataset
 ds <- dataset(df=df %>% no_unknown_gender(),
               response_variable_column="construction_type",
-              to_binary_columns=c("user_id", "dialect", "gender"),
-              other_columns=c("distance_from_antwerp", "is_reply"))
+              to_binary_columns=c("user_id", "dialect"),
+              other_columns=c("distance_from_antwerp", "is_reply", "gender"))
 
 # Get the list of features
 # In our case, this is the list of users
@@ -38,7 +37,7 @@ coefficients_with_labels <- net$attach_coefficients(
   output$fits[[lowest_loss_row[["X_id"]]]])
 
 # Export
-write.csv(coefficients_with_labels, "../output/gij_bent_coefficients.csv",
+write.csv(coefficients_with_labels, "../output/gij_bent_coefficients_two_genders.csv",
           row.names=FALSE)
 
 #
