@@ -257,7 +257,7 @@ coefficients %>%
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
 
-One might wonder whether the few innovators that do appear in the plots are perhaps those that live close to the border in their specific dialect regions, and are therefore "atypically" innovative for their region. To study this, we built a Generalised Additive Model or GAM [todo ref]. A GAM can fit smooth curves to "wavy" data. If extrapolated to two dimensions, it allows one to create "weatherman-like" heatmaps for linguistic data. In this case, we modelled the elastic net coefficients on the basis of the latitude and longitude values associated with the places in the profiles of the Twitter users, according to the following equation:
+We see in @fig-region-violin that, while they are few, innovators in non-Brabant dialect areas *do* exist. One might wonder what the profile of these rare innovators is. Perhaps they they live close to the border in their specific dialect regions, and are therefore "atypically" innovative for their region. To answer this question, we built a Generalised Additive Model or GAM [todo ref]. A GAM can fit smooth curves to "wavy" data. If extrapolated to two dimensions, it allows one to create "weatherman-like" heatmaps for linguistic data. In this case, we modelled the elastic net coefficients on the basis of the latitude and longitude values associated with the places in the profiles of the Twitter users, according to the following equation:
 
 todo equation
 
