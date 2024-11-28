@@ -405,6 +405,8 @@ posthoc %>% format_posthoc_table()
 
 4. Network influence
 
+Finally, we look at the network influence parameter. Recall that our influence predictor expresses the (im)balance between the "followers" and "following" metrics, with those users who are followed by more people than they follow themselves being attributed a larger influence. The regression table in @tbl-linear-predictors shows that, as our influence metric increases, so does the probability for the use of *gij bent*. This means that the more influential a speaker is in the Twitter network, the more likely they are to use the new, innovative *gij bent* form. [Todo Julie uitleg hoe en waarom dit zo is]
+
 [network effect explanation]
 
 ## Conclusion
