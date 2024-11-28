@@ -247,6 +247,8 @@ In general, the control variable results are comparable to the results from [mez
 [^anomaly]: The results for the West-Flemish dialect area need to be interpreted in conjunction with the "distance from northern Antwerp" parameter. The regression analysis assumes a zero distance from Antwerp from the intercept, but this does not make sense for dialect areas other than Brabant. Therefore, if we apply the extra corrections expressed in "distance from northern Antwerp", we get the expected negative correction towards the conservative form (`r 121 * -0.017`). Still, the *gij* pronoun is quite rare in this area, so the West-Flemish results should be treated with caution.
 
 ```{r #tbl-other-coefficients}
+#| label: tbl-other-coefficients
+#| tbl-cap: "Overview of the controlling predictors predictors, their values and whether they were retained by the elastic net regression" 
 # All other coefficients start with an underscore
 other_coefficients <- coefficients_full[coefficients_full$feature %>% substr(1,1) == "_",]
 # Change "removed" to "retained"
@@ -367,7 +369,8 @@ To answer this question, we built a common linear regression model. We model the
 
 : An overview of all predictors used in the linear regression model. {#tbl-linear-predictors}
 
-```{r linear-regression-model}
+```{r #tbl-linear-predictors}
+#| tbl-cap: "Results of the linear regression analysis. * indicates statistical significance"
 fit <- lm(coefficient ~ gender + dialect + influence, data=coefficients %>% no_unknown_gender())
 fit %>% format_table()
 ```
@@ -394,7 +397,8 @@ Next, we also see that there are significant differences between the reference d
 
 In addition, we wanted to know whether there are also differences *between* the non-Brabant dialact areas. To investigate this, we ran a post-hoc analysis through emmeans (TODO). In this post-hoc analysis, we check for each dialect area pair whether there are significant differences in individual variation between the two. We see in @tbl-posthoc-test that there are *no* further differences between the non-Brabant dialect areas. Our assessment of the two variation profiles was thus correct.
 
-```{r #tbl-posthoc-test}
+```{r tbl-posthoc-test}
+#| tbl-cap: Results of the `emmeans` posthoc analysis for dialect area. * indicates statistical significance
 posthoc <- emmeans(fit,
                    pairwise ~ dialect,
                    type="response",
