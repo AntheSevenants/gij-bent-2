@@ -414,3 +414,7 @@ Finally, we look at the network influence parameter. Recall that our influence p
 [network effect explanation]
 
 ## Conclusion
+
+- [algemeen idee van de individuele variatie]
+- [conclusies voor tussentaal]
+- [idee dat je op deze manier ook kunt vaststellen in welke fase van de verspreiding een fenomeen zit]
