@@ -30,6 +30,15 @@ coeff %>% no_unknown_gender %>%
   geom_violin() +
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
 
+# beeswarm(
+#   coefficient ~ gender,
+#   data=coeff %>% no_unknown_gender %>% filter(coefficient > 0), 
+# )
+
+coeff %>%
+  ggplot(aes(x = dialect, y = coefficient, color = gender)) +
+  geom_point()
+
 coeff %>%
   ggplot(aes(x = dialect, y = coefficient, fill = dialect)) +
   geom_violin() +
@@ -53,11 +62,23 @@ xtabs(~ dialect, coeff %>% filter(coefficient < 0))
 # Find forefront
 #
 brabant_snippet <- coeff %>% filter(dialect == "_is_dialect_Brabants") %>% arrange(coefficient)
+
+brabant_snippet %>% no_unknown_gender %>%
+  ggplot(aes(x = gender, y = coefficient, fill = gender)) +
+  geom_violin() +
+  geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
+
 fit <- lm(coefficient ~ log_followers + gender, data=brabant_snippet %>% no_unknown_gender())
 summary(fit)
 
 
-limburg_snippet <- coeff %>% filter(dialect == "_is_dialect_Limburgs") %>% arrange(coefficient)
+non_brabant_snippet <- coeff %>% filter(dialect != "_is_dialect_Brabants") %>% arrange(coefficient)
+
+non_brabant_snippet %>% no_unknown_gender %>%
+  ggplot(aes(x = gender, y = coefficient, fill = gender)) +
+  geom_violin() +
+  geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
+
 fit <- lm(coefficient ~ log_followers + gender, data=limburg_snippet %>% no_unknown_gender())
 summary(fit)
 
@@ -90,8 +111,8 @@ xtabs(~ gender, extreme_limburgers)
 extreme_brabanders <- coeff %>% filter(coefficient > 0 & dialect == "_is_dialect_Brabants") %>% no_unknown_gender()
 xtabs(~ gender, extreme_brabanders)
 lm(coefficient ~ gender, data=extreme_brabanders) %>% summary
-mean(extreme_brabanders %>% filter(gender == "_is_gender_female") %>% .$coefficient)
-mean(extreme_brabanders %>% filter(gender == "_is_gender_male") %>% .$coefficient)
+mean(extreme_brabanders %>% filter(gender == "gender_female") %>% .$coefficient)
+mean(extreme_brabanders %>% filter(gender == "gender_male") %>% .$coefficient)
 
 fanatic_zijt_user <- coeff[which.min(coeff$coefficient),]
 fanatic_bent_user <- coeff[which.max(coeff$coefficient),]
@@ -100,7 +121,7 @@ fanatic_bent_user <- coeff[which.max(coeff$coefficient),]
 # Analysis
 #
 
-fit <- lm(coefficient ~ influence + dialect + gender + distance_from_antwerp, data=coeff %>% no_unknown_gender())
+fit <- lm(coefficient ~ influence + dialect, data=coeff %>% no_unknown_gender())
 summary(fit)
 
 posthoc <- emmeans(fit,
