@@ -38,6 +38,10 @@ execute:
 #| output: false
 library(scales)
 library(ggplot2)
+library(broom)
+library(dplyr)
+library(tidycat)
+library(emmeans)
 
 formatn <- function(number) {
     format(round(as.numeric(number), 1), nsmall=0, big.mark=",")
@@ -76,6 +80,66 @@ coefficients$influence = log((coefficients$user_followers_count + 0.001) / (coef
 
 ```
 
+
+```{r regression-fit-format}
+format_num_col <- function(p_value) {
+  if (p_value < 0.01) {
+    return("<0.01")
+  } else {
+    return(formatd(p_value, 4))
+  }
+}
+format_num_col <- Vectorize(format_num_col)
+
+format_table <- function(df) {
+  df <- df %>% tidy %>% 
+    tidy_categorical(m = df) %>% 
+    filter(!is.na(term)) %>% 
+    select(-c(reference, term, effect)) %>%
+    mutate(variable = as.character(variable),
+           level = as.character(level)) %>%
+    mutate(level = ifelse(variable == level, "", level),
+           variable = as.character(variable)) %>% 
+    #group_by(variable) %>%
+    #mutate(variable = ifelse(row_number() == 1, variable, "")) %>%
+    #ungroup() %>%
+    mutate(term = ifelse(level != "", paste0(variable, ": ", level), variable)) %>%
+    select(-c(variable, level))
+  df <- df[, c("term", "estimate", "std.error", "statistic", "p.value")]
+
+  df$sig <- ifelse(df$p.value <= 0.05, "*", "")
+  
+  df$estimate <- df$estimate %>% formatd(2)
+  df$std.error <- df$std.error %>% formatd(2)
+  df$statistic <- df$statistic %>% formatd(2)
+  df$p.value <- df$p.value %>% format_num_col()
+
+  colnames(df) <- c("term", "coefficient", "std. error", "t value", "p value", " ")
+
+  return(df)
+}
+
+format_posthoc_table <- function(df) {
+  df <- df$contrasts %>% tidy()
+  df$term <- NULL
+  df$df <- NULL
+  df$null <- NULL
+  df$null.value <- NULL
+  df$contrast <- gsub("[()]", "", df$contrast)
+  df$contrast <- gsub("-", "↔", df$contrast)
+
+  df$sig <- ifelse(df$adj.p.value <= 0.05, "*", "")
+
+  df$estimate <- df$estimate %>% formatd()
+  df$std.error <- df$std.error %>% formatd()
+  df$statistic <- df$statistic %>% formatd()
+  df$adj.p.value <- df$adj.p.value %>% format_num_col()
+
+  colnames(df) <- c("contrast", "coefficient", "std. error", "t value", "p value", "")
+
+  return(df)
+}
+```
 
 ## Introduction {#sec:introduction}
 
@@ -269,13 +333,77 @@ In general, then, we see that there are two trends in the variation coefficients
 
 [violin plots]
 
-### Profile analysis
+#### Network effects
 
+As mentioned in INTRODUCTION TODO, the networked aspect of social media data provides an opportunity for researchers to investigate which people use what variant, and what that says about the diffusion of a new variant. Since our dataset comes from the Twitter platform, we also dispose of metrics which define a user's relative popularity on the platform. The first metric, "Followers", tallies how many other users want to see a user's posts appear in their own social media feed. Users with a large number of followers have a broad reach, and therefore have the possibility to be influential in their language use. The second metric, "Following", states how many other people's posts a user wants to see in their social media feed. Users who follow a large number of other users have the opportunity of being exposed to a larger linguistic pallette -- though this need not necessarily be the case.
 
+To assess the influence of the users in our dataset within the larger Twitter network, we devised a metric which is based on the ratio between "Followers" and "Following". The idea of the metric is that users who have a large number of followers, yet follow few people themselves, have a larger relative influence than users without this asymmetry. Our influence metric is shown in Equation TODO.
 
-[profiles: most extreme corrections per author]
+$$
+\log{
+  \frac{
+    \text{\# followers} + 0.001
+  } {
+    \text{\# following} + 0.001
+  }
+}
+$$
 
-[regression analysis]
+Our influence metric is based on the priming ratio from [mezelf geaccepteerd leuk] and hinges on logarithm and Laplace smoothing (TODO). The logarithm is a key operation in order to compress the wide numeric range found in follower and following counts. Where some users have thousands of followers, some only have a few. The use of the logarithm scales this discrepancy down. In addition, we use Laplace smoothing in order to avoid division by zero, in the event that users do not follow other users. The mean influence value among our speakers is `r coefficients$influence %>% mean() %>% formatd()` (median `r coefficients$influence %>% median() %>% formatd()`). The boxplot in @fig-influence shows that our dataset generally consists of more influential figures, i.e. users who have more followers than they themselves follow people. This is expected, since [todo parlee over disparity tussen posters en lurkers].
+
+```{r #fig-influence}
+boxplot(coefficients$influence, horizontal = T)
+```
+
+In our case, we want to know how the language users who are thought to be influential in our network behave. Are they are the forefront of innovation, or are they conservative? Depending on what profile we find, we might be able to discern in what phase of diffusion the *gij bent* innovation is situated (see Section TODO).
+
+To answer this question, we built a common linear regression model. We model the coefficients in term of the influence of the users, but we also supplement our analysis with the dialect and gender distinctions we discussed earlier. Bundling all these possible influences in the same model will ensure that we do not accidentally assign variation between language users to the wrong source. It will also function as an extra check for the results from Section TODO, as we will now be able to check statistically whether the distinctions we spotted in the visual exploration are statistically significant distinctions. @tbl-linear-predictors gives an overview of the predictors that were used in the linear regression model.
+
+|predictor|explanation|
+|---|---|
+|dialect|the dialect area the tweet poster belongs to ("West Flemish", "East Flemish", "Brabantian", "Limburgish")
+|gender|the estimated gender of the tweet poster -- generated automatically|
+|influence|a metric expressing the relative influence of a language user within the Twitter network|
+
+: An overview of all predictors used in the linear regression model. {#tbl-linear-predictors}
+
+```{r linear-regression-model}
+fit <- lm(coefficient ~ gender + dialect + influence, data=coefficients %>% no_unknown_gender())
+fit %>% format_table()
+```
+
+We will first go over the controlling variables we discussed earlier, and then move on to the influence predictor.
+
+1. Intercept
+
+First, we look at the intercept of the model. Just like in TODO, the intercept here expressed the "default" situation against which further corrections need to be understood. Here, the intercept expresses a language user ...
+
+- ... from the Brabant dialect area
+- ... who is assumed to be male
+- ... with an influence of "zero"
+
+Our intercept starts from a value of TODO, which shows a slight bias for innovative behaviour. All further corrections need to be understood relative to this value.
+
+2. Gender
+
+We see that the distinction between users who are thought to be male and users who are thought to be female does not reach the significance threshold. Therefore, the differences which we discussed in TODO are not different enough to the degree that they are actually distinct. Still, the fact that the *tendency* is clearly there is still interesting, and the reversal of the extreme values of course still holds.
+
+3. Dialect area
+
+Next, we also see that there are significant differences between the reference dialect area (Brabant) and all other dialect areas. As was already clear from the visual inspection of the corrections per dialect area, we see that in non-Brabant areas, the corrections tend towards the conservative form, whereas Brabant area corrections are mostly innovative.
+
+In addition, we wanted to know whether there are also differences *between* the non-Brabant dialact areas. To investigate this, we ran a post-hoc analysis through emmeans (TODO). In this post-hoc analysis, we check for each dialect area pair whether there are significant differences in individual variation between the two. We see in @tbl-posthoc-test that there are *no* further differences between the non-Brabant dialect areas. Our assessment of the two variation profiles was thus correct.
+
+```{r #tbl-posthoc-test}
+posthoc <- emmeans(fit,
+                   pairwise ~ dialect,
+                   type="response",
+                   weights="proportional")
+
+posthoc %>% format_posthoc_table()
+```
+
+4. Network influence
 
 [network effect explanation]
 
