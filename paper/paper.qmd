@@ -296,7 +296,7 @@ coefficients %>%
   geom_vline(xintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
 
-#### Variation patterns among groups
+#### Variation patterns among groups {#sec-group-variation}
 
 ##### Gender
 
@@ -363,7 +363,7 @@ boxplot(coefficients$influence, horizontal = T)
 
 In our case, we want to know how the language users who are thought to be influential in our network behave. Are they are the forefront of innovation, or are they conservative? Depending on what profile we find, we might be able to discern in what phase of diffusion the *gij bent* innovation is situated.
 
-To answer this question, we built a common linear regression model. We model the coefficients in term of the influence of the users, but we also supplement our analysis with the dialect and gender distinctions we discussed earlier. Bundling all these possible influences in the same model will ensure that we do not accidentally assign variation between language users to the wrong source. It will also function as an extra check for the results from Section TODO, as we will now be able to check statistically whether the distinctions we spotted in the visual exploration are statistically significant distinctions. @tbl-linear-predictors gives an overview of the predictors that were used in the linear regression model.
+To answer this question, we built a common linear regression model. We model the coefficients in term of the influence of the users, but we also supplement our analysis with the dialect and gender distinctions we discussed earlier. Bundling all these possible influences in the same model will ensure that we do not accidentally assign variation between language users to the wrong source. It will also function as an extra check for the results from @sec-group-variation, as we will now be able to check statistically whether the distinctions we spotted in the visual exploration are statistically significant distinctions. @tbl-linear-predictors gives an overview of the predictors that were used in the linear regression model.
 
 |predictor|explanation|
 |---|---|
