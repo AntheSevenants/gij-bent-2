@@ -1,0 +1,1282 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  oneside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[left=1in,marginparwidth=2.0666666666667in,textwidth=4.1333333333333in,marginparsep=0.3in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\KOMAoption{captions}{tablesignature}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{sidenotes}{}{\usepackage{sidenotes}}
+\@ifpackageloaded{marginnote}{}{\usepackage{marginnote}}
+\makeatother
+
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={gij bent 2},
+  pdfauthor={Anthe Sevenants; Julie Nijs},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{gij bent 2}
+\author{Anthe Sevenants \and Julie Nijs}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+TODO
+\end{abstract}
+
+\renewcommand*\contentsname{Table of contents}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{4}
+\tableofcontents
+}
+
+\section{Introduction}\label{sec-introduction}
+
+One of the key ideas from usage-based linguistics is that language is
+not a system that exists just ``by itself''. Rather, it is widely
+accepted within this branch that language arises out of the many
+interactions that language users have with each other (Keller 1994). As
+such, language becomes a ``complex-adaptive system'' (Ellis 2012;
+Kretzschmar 2015), a system without a single authoritative control,
+constructed through the simple yet numerous interactions of its
+components, language users. While each speaker of a language (be it
+Dutch, English or Maori) has their own personalised representation of
+the rules and constraints that they think make up that language, these
+representations have enough in common in order to warrant talking about
+a shared ``code'', or more broadly, a language.
+
+When it comes to research of said shared code, things become more
+complicated. It is impossible for researchers to know the complete code
+of \emph{all} language users in a language system. This situation forces
+models of language into necessary generalisations. Generalisation is a
+valid strategy, as most linguistic variation, when tallied at large,
+will lead to a Zipfian (Zipf 1965) A-curve (as suggested by Kretzschmar
+2015). The make-up of this curve, with the most popular forms capturing
+most of the language use anyway, makes it so the ``general'' behaviour
+of language variation that is typically captured in corpora also
+represents a fair share of what would be the individual code of most
+language users. Of course, there are factors influencing what language
+forms are used,\sidenote{\footnotesize For example, one of the language varieties or
+  ``lects'', defined as ``dialects, regiolects, national varieties,
+  registers, styles, idiolects, whatever'' (Geeraerts 2005, 168)} but
+broadly speaking, this generalisation holds. We see this, for example,
+in probabilistic grammar, the branch of variation studies that
+investigates how variation reflects competing constraints on linguistic
+choices (Grafmiller et al. 2018). Still, on a theoretical level, it is
+regrettable that models of variation do not start from the lowest common
+denominator of this variation: the language user.
+
+Contrastively, the advent of social media offers a unique opportunity
+for variationist research. Social media platforms offer an insight into
+the language systems of a large number of people. Whereas previously it
+was possible to gauge the linguistic profile of only a small group of
+people (e.g. Labov et al. 1968; Milroy and Milroy 1978), social media
+offer linguistic variation at an unprecedented scale.\sidenote{\footnotesize More
+  recently, the release of the C-Clamp corpus {[}todo{]} offers a
+  diachronic insight into the language use of Dutch-speaking writers
+  from XXX to XXX. The historical nature of this corpus, however, limits
+  its use for research into contemporary language variation phenomena.}
+While one should not consider spoken and written social media as
+equivalent, social media language has nonetheless proven a useful proxy
+for the former (Vandekerckhove and Cuvelier 2007, 255). In addition,
+social media data of course do not provide access to \emph{all} of
+language for \emph{all} users of a language system; not all utterances
+are made on social media, nor are all language users active on social
+media platforms. Nevertheless, social media platforms bring us closer to
+the idea of studying language \emph{inside out}, starting from
+individual language users' variation, even if it is only for a single
+alternation among a subset of language users. This brings us to the
+first research question of this study:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  What affordances does a focus on individual variation bring us in the
+  context of alternation research, especially in contrast to
+  traditional, aggregated alternation research?
+\end{enumerate}
+
+{[} @ Julie: misschien hier een stuk over het reeds bestaande onderzoek
+naar individuele variatie. hoeft niet veel te zijn maar nu staat er
+niets en dat is misschien niet top {]}
+
+Another aspect of of the complex-adaptive system of language are the
+connections between people. Humans are embedded in larger social
+networks, which are formed according to a so-called ``power law''. This
+means the network has a small number of people with a large number of
+connections, supplemented by many people who have relatively few
+connections (Barabasi 1999).
+
+Linguistically, the effects of networks has been studied before {[}stuk
+Julie{]}.
+
+\begin{itemize}
+\tightlist
+\item
+  leaders / loaners
+\item
+  gedrag van centrale figuren
+\item
+  alle andere dingen die interessant zouden kunenn zijn
+\end{itemize}
+
+Except for small-scale studies (e.g. Labov et al. 1968; Milroy and
+Milroy 1978), it has been impossible to get an elaborate insight into
+the social relationships of people on a large scale, let alone how these
+relationships relate to language. Again, social media offer an
+opportunity here. While it is not practical to get a full network of
+\emph{all} social media users, we \emph{can} get information on how
+``connected'' a particular user is. Through metrics like ``followers''
+and ``following'', we know how many connections social media users have.
+This allows us to get an idea of the centrality of a user in the larger
+social media network, even if we do not know the full network itself.
+This brings us to the second research question in this study:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  How can we leverage the network implicit in social media data to learn
+  more about the spread of linguistic innovations?
+\end{enumerate}
+
+To answer the two research questions stated above, we follow up on a
+study by Sevenants (Sevenants 2024a) about \emph{gij bent}, a linguistic
+innovation concerning the second person of `to be' in Colloquial Belgian
+Dutch (CBD). To compute the individual variation of different language
+users, we will use elastic net regression, a technique suited to
+determining individual variation. First, we will introduce the \emph{gij
+bent} CBD linguistic innovation. Then, we will introduce the dataset and
+describe how we modelled the linguistic profiles of the individual users
+with regard to this innovation using elastic net, and why we need this
+specific technique to answer the questions we have in this study. Next,
+we will show the results of our analyses, and discuss what consequences
+they have for usage-based alternation research in general.
+
+\section{\texorpdfstring{The case of \emph{gij
+bent}}{The case of gij bent}}\label{the-case-of-gij-bent}
+
+This study focusses on \emph{gij bent}, an innovation within Colloquial
+Belgian Dutch (CBD). Before we explain what this innovation is about, we
+will first explain the general language situation of Dutch in Belgium.
+
+\subsection{Dutch in Belgium}\label{dutch-in-belgium}
+
+Dutch as it is spoken in Belgium has evolved strongly since the second
+half of the 20\textsuperscript{th} century. In the largest part of the
+20\textsuperscript{th} century, the language situation of Dutch in
+Flanders, the Dutch-speaking part of Belgium, could best be described as
+a \emph{diglossia} (Auer 2005). This means that the Dutch was
+characterised by a dichotomy between standard language on the one hand,
+and dialects on the other hand. These two were the language modes
+available to speakers of Dutch. A large-scale language policy campaign
+at the timed attempted to teach those speakers who mastered only their
+local dialect the standard language. While these efforts were well
+intended, the imposition of a ``foreign'' standard language -- the
+standard was imported from the Netherlands -- were met with limited
+enthusiasm by language users in Flanders. However, this language
+campaign was not without effect, albeit not the intended one.
+
+At the start of the 21\textsuperscript{st} century, it had become clear
+that Flanders was evolving into a new type of language situation:
+\emph{diaglossia} (Auer 2005). In between the dialects and standard
+language, new language types had appeared, among which so-called
+``regiolects'' (above the dialects) and ``regional standards'' (below
+standard language). More generally, however, a new term was coined:
+\emph{tussentaal}, which roughly translates to ``interlanguage''. In
+this article, we will use the English term as defined by Vandekerckhove
+(2005): ``Colloquial Belgian Dutch'' or CBD.
+
+The new variant CBD is characterised by being hard to define. In
+general, it is best described as a ``standard-adjacent'', colloquial
+form of Belgian Standard Dutch, with both general Flemish elements and
+region-specific features added to it on all levels (phonology,
+morphology, syntax etc.). The presence of region-specific features means
+that CBD is not a monolithic language variety, but rather sounds
+different across all places in Flanders. This inherent variability is
+intrinsic to its linguistic identity, but frustrating to linguists, who
+have been trying to come up with ``defining features'' for decades (i.e.
+Geeraerts 2000; Taeldeman 2008).
+
+\subsection{\texorpdfstring{\emph{gij bent}}{gij bent}}\label{gij-bent}
+
+Traditionally in Flanders, if one wishes to say ``you are'' in an
+informal way, they would say \emph{gij zijt}. \emph{Gij} marks the
+informal second person pronoun that is typical to most Flemish dialects.
+\emph{Zijt} is a historic form of \emph{zijn} `to be' that is now
+exclusively used with this pronoun. If one wanted to say ``you are'' in
+a formal way (i.e.~in standard language), they would say \emph{jij
+bent}. \emph{Jij} marks the non-polite, yet formal second person pronoun
+in Flanders. \emph{Jij} is more formal than \emph{gij} because the
+\emph{jij} pronoun is actually a Netherlandic form that, because it is
+foreign, has a different status than \emph{gij}. \emph{Bent} is the
+conjugated form that goes along with \emph{jij}. It is also imported
+from the Netherlands.
+
+It is clear, then, that these two forms are distinctly different from
+each other. However, in CBD, a blend of these two forms has appeared:
+\emph{gij bent}. It combines the \emph{gij} pronoun from \emph{gij zijt}
+with the \emph{bent} conjugation known from standard language. \emph{Gij
+bent} is a quite literal example of the diaglossia situation, as it
+combines \emph{gij} and \emph{bent} from polar opposites of the language
+spectrum and meets somewhere in the middle.
+
+Research by Sevenants (2024a) has shown that \emph{gij bent} most likely
+originated in dialects from the northern Antwerp province in Flanders,
+and then spread to other parts of the Brabantian dialect
+area.\sidenote{\footnotesize Brabants is the dialect area coinciding, mostly, with the
+  Flemish provinces ``Vlaams-Brabant'' and ``Antwerp''. It is said to be
+  the driving force behind CBD, but this claim is disputed (Ghyselen,
+  Anne-Sophie 2016).} The reason for the spread from this area is argued
+to lie in the function of \emph{gij bent}. The \emph{jij bent} from
+standard language might feel too formal, while the \emph{gij zijt} from
+dialects might feel too blunt. \emph{Gij bent} strikes a balance between
+the two: it has colloquial roots through Flemish \emph{gij}, but
+benefits from the prestige associated with standard language (Impe and
+Speelman 2007) through standard \emph{bent}. In addition, both regional,
+formality and gender effects were found:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  the use of \emph{gij bent} is limited to the Brabant dialect region
+  only
+\item
+  the use of \emph{gij bent} is less likely in more informal contexts
+\item
+  the use of \emph{gij bent} is more likely for women
+\end{enumerate}
+
+While these conclusions are drawn from language use originating from
+social media, the analysis itself is very traditional. As in a standard
+corpus linguistic study, it generalises over all language at once, as
+well as all language users. This leads to blanket statements as the ones
+above. As argued before, there is nothing inherently wrong with this
+approach, but given the opportunities in social media data, a more
+bottom-up approach would be interesting. More specifically, such an
+approach would allow us to detect whether certain language users behave
+differently from what we would expect given their location or gender.
+These deviations from general expectations are now invisible in the
+generalising models. In addition, no account was taken of the network
+structure hidden in the data, which might reveal more about the forces
+and the direction this innovation will take in the future.
+
+\section{Data and methodology}\label{data-and-methodology}
+
+\subsection{Dataset}\label{dataset}
+
+As this study is a follow-up on the \emph{gij bent} study by Sevenants
+(2024a), we will re-use the dataset used in that study. The dataset
+contains 29,429 social media posts from Belgium on the Twitter platform
+(now X). These tweets either contain the traditional \emph{gij zijt} or
+the innovative \emph{gij bent} construction. The tweets are tagged for
+the Flemish dialect region to which each tweet author belongs. In
+addition, gender information was estimated for each tweet author using
+\emph{gender-from-name-r} (Sevenants 2024b). Authors for whom gender
+could not be established were removed, to retain parity with Sevenants
+(2024a). The dataset also contains a formality distinction for each
+tweet (``more formal'', ``more informal''), based on whether a tweet
+interacts with other people. If it does, the idea is that the tweet is
+conversation-like and thus more informal. Each tweet also has a unique
+(anonymised) identifier, so tweets can be grouped by author. This will
+prove especially useful for this study on individual variation, since we
+need several tweets in order to gauge the language use of a specific
+speaker. For each author, we also know many accounts they follow, and
+how many accounts they are followed by. This is a metric that is useful
+for our questions about network influences. For our analysis of
+individual variation, we retained only those authors who have at least
+10 tweets in our dataset. We did this in order to guarantee a stable
+estimation of each speaker's language use. After all filtering
+operations, we were left with 16,968 tweets by 635 unique authors.
+
+\subsection{Elastic net regression}\label{elastic-net-regression}
+
+To estimate the individual variation among our tweet authors, we would
+ideally have a quantitative measure which indicates the deviation of
+each user from the expected linguistic behaviour. Authors who do not
+deviate would be assigned a (near-)zero value, while those who \emph{do}
+deviate would receive either a positive or negative value, depending on
+whether they exceed the expectations for their profiles, or actually go
+against it. In this way, our measure of individual variation truly
+expresses the peculiarities of each individual speaker.
+
+In order to operationalise this computation of individual variation, we
+made use of elastic net regression (Friedman, Tibshirani, and Hastie
+2010). Elastic net regression is an extension of more ``traditional''
+regression techniques (discussed in Gries 2015). Its main innovation is
+that it uses an extra ``penalty'' term, which prevents model
+coefficients, the values associated with model predictors, from growing
+too large. One could think of this as making the model \emph{worse}, but
+on purpose. In practice, this model penalty is applied for two reasons.
+First, it attempts to prevent overfitting. Too few data points can skew
+the estimation of a coefficient, so the penalty is a means to attenuate
+predictions in such cases. Second, the model penalty can function as a
+way to do variable selection. With elastic net, a coefficient can be
+``punished'' to the extent that it nears or equals to zero. With this,
+the predictor of that coefficient is disabled outright. We can use this
+behaviour to enter many predictors in the same analysis at once, and let
+the model decide which ones are actually interesting.
+
+In addition, elastic net leverages ``k-fold cross validation''. This
+technique divides the data into several parts and iteratively uses
+different parts for training and testing the regression model. This
+practice also contributes towards general robustness and the prevention
+of overfitting. K-fold cross validation allows us to have hundreds of
+predictors in a single analysis, which is a useful property when we want
+to track a multitude of language users at the same time. Such a thing
+would be impossible with a regular regression analysis on the basis of
+mathematical intractability (i.e.~with mixed models). For additional
+details on elastic net regression for linguistics, see Sevenants, Van de
+Velde, and Speelman (n.d.).
+
+In general, then, elastic net regression lends itself nicely to research
+into individual variation. With elastic net, we modelled the presence of
+either \emph{zijt} (conservative) or \emph{bent} (innovative) as a
+logistic response variable. In our model, we estimated coefficients for
+each language user separately by treating those language users as
+individual predictors. Because we also included all the predictors from
+Sevenants (2024a) in our analysis, these more general predictors
+(gender, dialect region, distance from northern Antwerp, formality) form
+the ``expectation'' for each specific speaker. Due to the multifactorial
+control characteristic\sidenote{\footnotesize Multifactorial control means that the
+  analysis takes all predictors into account at the same time. This
+  guarantees that variation due to one predictor is not assumed to stem
+  from another.} of regression analysis, this makes it so each
+individual speaker's coefficient becomes a measure of the variation that
+is not explained on the basis of the more general predictor terms,
+i.e.~the individual deviation or variation we expressed our desire for
+in the previous sections.
+
+For an overview of all predictors included in our model, see
+Table~\ref{tbl-predictors}.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+predictor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+explanation
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+predictor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+explanation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+dialect* & the dialect area the tweet poster belongs to (``West
+Flemish'', ``East Flemish'', ``Brabantian'', ``Limburgish'') \\
+gender & the estimated gender of the tweet poster -- generated
+automatically \\
+distance from northern Antwerp & the distance of the poster's location
+in km from the northern Antwerp area \\
+formality & the formality of the tweet -- derived from whether the tweet
+author interacts with another user in the tweet \\
+user\_id* & a unique (anonymised) identifier for the tweet author --
+allows us to know which tweets belong to the same person \\
+\caption{An overview of all predictors which will be used in the elastic
+net regression. Predictors marked with * receive separate predictors for
+each level (for example, separate predictors for each tweet
+author).}\label{tbl-predictors}\tabularnewline
+\end{longtable}
+
+For our analysis, we used ElasticToolsR (Sevenants 2023), a package for
+the R language (R Core Team 2021) which simplifies running elastic net
+regression models.
+
+\section{Results}\label{results}
+
+In this section, we will go over the results produced by our elastic net
+regression model. We will first look at the predictors included in the
+previous study to ensure our model produces comparable results. Then, we
+will dive into the predictors describing the behaviour of the individual
+language users.
+
+\subsection{Controlling predictors}\label{sec-controlling-predictors}
+
+Table~\ref{tbl-other-coefficients} gives an overview of the ``control''
+coefficients that were included in order to have multifactorial control
+for the individual variation. Since the innovative \emph{bent} variant
+was encoded as outcome ``1'', and the conservative \emph{zijt} was
+encoded as outcome ``0'', positive coefficients mean a a correction
+towards the innovative variant, while negative corrections mean a
+correction towards the conservative variant. These corrections must be
+interpreted from the situation expressed in the intercept, a ``reference
+situation'' that is defined as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  formal situation (no reply or interaction)
+\item
+  at distance ``0'' from northern Antwerp
+\item
+  for users assumed to be male
+\end{itemize}
+
+In general, the control variable results are comparable to the results
+from Sevenants (2024a). The innovative \emph{gij bent} is more popular
+in the Brabant dialect area (positive correction), and less popular in
+the other areas (negative corrections). We even see the same anomaly for
+the West-Flemish dialect area.\sidenote{\footnotesize The results for the West-Flemish
+  dialect area need to be interpreted in conjunction with the ``distance
+  from northern Antwerp'' parameter. The regression analysis assumes a
+  zero distance from Antwerp from the intercept, but this does not make
+  sense for dialect areas other than Brabant. Therefore, if we apply the
+  extra corrections expressed in ``distance from northern Antwerp'', we
+  get the expected negative correction towards the conservative form
+  (-2.079). Still, the \emph{gij} pronoun is quite rare in this area, so
+  the West-Flemish results should be treated with caution.} \emph{gij
+bent} becomes less popular as we move away from northern Antwerp, and
+more informal tweets also correct towards the conservative \emph{gij
+zijt} (albeit only very slightly). We still see the expected gender
+effect, where tweets assumed to come from women have a higher
+probability of the use of \emph{gij bent}. Compared to Sevenants
+(2024a), some predictors have more subtle effects. Especially the
+distance correction and the formality distinction correction are
+smaller. We assume these differences stem from (i) the coefficient
+attenuation from the elastic net penalty (ii) a difference in dataset
+size -- Sevenants (2024a) used only one tweet per user because of issues
+with random effects, which we sidestep by using elastic net regression
+(iii) parts of the variation attributed to other predictors in Sevenants
+(2024a) will now be attributed to individual variation. Still, broadly
+speaking, the results remain comparable. Therefore, we can safely move
+on to the discussion of the individual variation.
+
+\begin{longtable}[]{@{}lrl@{}}
+
+\toprule\noalign{}
+predictor & coefficient & retained \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+dialect: Brabants & 0.878 & yes \\
+gender: female & 0.705 & yes \\
+dialect: West-Vlaams & 0.000 & no \\
+distance from Antwerp (km) & -0.017 & yes \\
+dialect: Oost-Vlaams & -0.081 & yes \\
+reply: yes & -0.098 & yes \\
+dialect: Limburgs & -1.216 & yes \\
+
+
+\caption{\label{tbl-other-coefficients}Overview of the controlling
+predictors predictors, their values and whether they were retained by
+the elastic net regression}
+
+\tabularnewline
+\end{longtable}
+
+\subsection{Individual variation}\label{individual-variation}
+
+In this section, we will go over the coefficients that were computed for
+each language user. We will first look at the variation patterns
+globally, and then zoom in on the differences between different groups
+of language users. We will also attempt to model the coefficients in
+order to find relations between them.
+
+\subsubsection{Global variation pattern}\label{global-variation-pattern}
+
+First, we will look at the coefficient globally. The density plot of the
+variation coefficients in Figure~\ref{fig-general-density} gives a
+global overview of the how each language user ``deviates'' from what is
+expected given their gender, location etc.. Negative coefficients on the
+left side of the plot show deviations of individual language users
+towards the conservative \emph{gij zijt}. Positive coefficients on the
+right side of the plot show deviations of individual language users
+towards the innovative \emph{gij bent}. The middle dotted line marks the
+zero coefficient, i.e.~those who do not deviate from the expected norm.
+We see that there is a bi-modal distribution in the variation
+coefficients. The first distribution shows many slights corrections
+towards the conservative form (first bump). The second distribution
+shows a smaller number of larger corrections towards the innovative form
+(second bump). This bi-modal variation pattern would have remained
+invisible in a more traditional regression model.
+
+Note that each of the two different distributions might not consist of a
+homogeneous type of people. For example, the innovative corrections
+might include people in regions where the innovative form is rarely
+used, and who use the innovative form nonetheless. At the same time,
+innovative corrections might also stem from people in an already
+innovative area who ``out-innovate'' the expectations, using the
+innovative form even more often than is expected. We will attempt to
+tease out this distinction in the next section.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{paper_files/figure-pdf/fig-general-density-1.pdf}
+
+}
+
+\caption{\label{fig-general-density}A density plot describing the
+individual variation coefficients in our dataset. The left side of the
+plot (negative coefficients) shows corrections towards the conservative
+form, the right side of the plot (positive coefficients) shows
+corrections towards the innovative form.}
+
+\end{figure}%
+
+\subsubsection{Variation patterns among
+groups}\label{sec-group-variation}
+
+\paragraph{Gender}\label{gender}
+
+Next, we will look at the patterns of variation among different groups.
+Figure~\ref{fig-gender-violin} shows the distribution of variation
+coefficients between men and women. There are two key points. First, we
+see that men and women have comparable profiles, with the same bi-modal
+trend seen in the general coefficients overview. We will address this
+bi-modality in the section on dialect variation patterns.
+
+Secondly, we see that the most extreme innovative corrections in the
+plot stem from men, while the most extreme conservative corrections stem
+from women. This is peculiar, in the sense that this pattern
+``reverses'' what we know from from Sevenants (2024a) and
+Section~\ref{sec-controlling-predictors}. However, keep in mind that the
+plot shows \emph{corrections} on top of \emph{expectations}. Though
+there are general trends that dictate a certain preference for men or
+women, this does not mean that \emph{all} individuals from that group
+follow that same pattern. Figure~\ref{fig-gender-violin} shows this
+reversal: there are ample outlier speakers who deviate from what is
+typically expected from their gender, and this also highlights the need
+to be cautious when making generalisations in this regard. At the same
+time, the distributions between men and women are still similar enough
+that we likely cannot speak of distinctly different profiles. We will
+come back to this in our regression model of the coefficients in
+Section~\ref{sec-regression}.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{paper_files/figure-pdf/fig-gender-violin-1.pdf}
+
+}
+
+\caption{\label{fig-gender-violin}A violin plot describing the
+individual variation coefficients for men and women. A wider figure
+means more data for that y value.}
+
+\end{figure}%
+
+\paragraph{Dialect}\label{dialect}
+
+Next, we look at the dispersion of variation by Flemish dialect region
+in Figure~\ref{fig-region-violin}. Here, we do not see a ``reversal''
+pattern, in contrast to Figure~\ref{fig-gender-violin}. There seem to be
+two variation profiles: a Brabant variation profile, and a non-Brabant
+variation profile. The Brabant variation profile shows how in the
+Brabant dialect region, there is a slight preference for innovation at
+the upper end of the coefficient values, with declining coefficents
+towards conserative corrections. In the three non-Brabant regions, we
+see that there are some innovators, but they are generally few. In these
+dialects, the values gravitate towards more conservative corrections.
+With these results, we have an explanation for the bi-modal nature of
+Figure~\ref{fig-general-density}: the first distribution, centred
+\emph{below} zero, consists mostly of language users from non-Brabant
+dialect areas who are even more conservative than we expect from their
+region, and therefore correct ``downwards''. The second distribution,
+centred \emph{above} zero, consists mostly of eager innovators from the
+already innovative Brabant dialect area. As avid users of the innovative
+form, they correct ``upwards'' in our plots.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{paper_files/figure-pdf/fig-region-violin-1.pdf}
+
+}
+
+\caption{\label{fig-region-violin}A violin plot describing the
+individual variation coefficients by region. A wider figure means more
+data for that y value.}
+
+\end{figure}%
+
+We see in Figure~\ref{fig-region-violin} that, while they are few,
+innovators in non-Brabant dialect areas \emph{do} exist. One might
+wonder what the profile of these rare innovators is. Perhaps they they
+live close to the border in their specific dialect regions, and are
+therefore ``atypically'' innovative for their region. To answer this
+question, we built a Generalised Additive Model or GAM (Hastie and
+Tibshirani 1987). A GAM can fit smooth curves to ``wavy'' data. If
+extrapolated to two dimensions, it allows one to create
+``weatherman-like'' heatmaps for linguistic data. In this case, we
+modelled the elastic net coefficients on the basis of the latitude and
+longitude values associated with the places in the profiles of the
+Twitter users, in addition to the interaction of the two axes (``tensor
+smooth'', \(te\)). This gives rise to the following equation:
+
+\[
+\text{construction} \sim s(\text{longitude}) + s(\text{latitude}) + te(\text{longitude}, \text{latitude})
+\]
+
+We will immediately shift towards the visual interpretation of the GAM
+in TODO. Dark blue colours show corrections towards the conservative
+variant, whereas light yellow colours show corrections towards the
+innovative variant. Beware to keep in mind, however, that these
+corrections are to be interpreted against the expected behaviour in that
+specific dialect region. In the GAM plot, we see that the northern
+Antwerp region is specifically innovative in contrast to an already
+innovative dialect region, Brabant. This is expected from the results by
+Sevenants (2024a). What is especially interesting given our interest in
+the innovators in the non-Brabant regions, is that we indeed see that
+areas closer to the Brabant border show corrections that tend more
+towards the innovative variant. In addition, we also see that there
+seems to be an additional horizontal diffusion pattern, where the more
+innovative variant seems to spread from east to west in the east and
+from west to east in the west. This pattern remained invisible in the
+original study. Computer simulations have shown that border-adjacent
+speakers can play an important role as gatekeepers of innovations, since
+their hybrid identity can form a ``bridge'' through which innovations
+can be passed on (Sevenants and Speelman 2021). In a sense, the
+horizontal positive variation coefficient pattern shows the pathway that
+\emph{gij bent} might take in the future in order to break through in
+these other dialect regions.
+
+TODO figure
+
+In general, then, we see that there are two trends in the variation
+coefficients. Firstly, for gender, we see a ``reversal'' pattern, where
+typical behaviour is not shared across the entire gender group.
+Secondly, we see a wave-like (François 2014) horizontal diffusion
+pattern in the non-Brabant dialect regions, even in regions which, in
+the general analysis, are thought to be rather conservative. Though
+speakers are of course free to use whatever forms they want, how they
+deviate from expectations is not random.
+
+{[}violin plots{]}
+
+\subsubsection{Network effects}\label{sec-regression}
+
+As mentioned in Section~\ref{sec-introduction}, the networked aspect of
+social media data provides an opportunity for researchers to investigate
+which people use what variant, and what that says about the diffusion of
+a new variant. Since our dataset comes from the Twitter platform, we
+also dispose of metrics which define a user's relative popularity on the
+platform. The first metric, ``Followers'', tallies how many other users
+want to see a user's posts appear in their own social media feed. Users
+with a large number of followers have a broad reach, and therefore have
+the possibility to be influential in their language use. The second
+metric, ``Following'', states how many other people's posts a user wants
+to see in their social media feed. Users who follow a large number of
+other users have the opportunity of being exposed to a larger linguistic
+pallette -- though this need not necessarily be the case.
+
+To assess the influence of the users in our dataset within the larger
+Twitter network, we devised a metric which is based on the ratio between
+``Followers'' and ``Following''. The idea of the metric is that users
+who have a large number of followers, yet follow few people themselves,
+have a larger relative influence than users without this asymmetry. Our
+influence metric is shown in the following equation:
+
+\[
+\log{
+  \frac{
+    \text{\# followers} + 0.001
+  } {
+    \text{\# following} + 0.001
+  }
+}
+\]
+
+Our influence metric is based on the priming ratio from Sevenants, Van
+de Velde, and Speelman (n.d.) and hinges on logarithm and Laplace
+smoothing (Brysbaert and Diependaele 2013). The logarithm is a key
+operation in order to compress the wide numeric range found in follower
+and following counts. Where some users have thousands of followers, some
+only have a few. The use of the logarithm scales this discrepancy down.
+In addition, we use Laplace smoothing in order to avoid division by
+zero, in the event that users do not follow other users. The mean
+influence value among our speakers is 0.30 (median 0.28). The boxplot in
+Figure~\ref{fig-influence} shows that our dataset generally consists of
+more influential figures, i.e.~users who have more followers than they
+themselves follow people. This is expected, since generally speaking,
+90\% of social media users only read, but never post themselves (Nielsen
+2006). Since our dataset consists of posts, it makes sense that our
+dataset mainly engages with the other 10\%, the active users.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{paper_files/figure-pdf/fig-influence-1.pdf}
+
+}
+
+\caption{\label{fig-influence}}
+
+\end{figure}%
+
+In our case, we want to know how the language users who are thought to
+be influential in our network behave. Are they are the forefront of
+innovation, or are they conservative? Depending on what profile we find,
+we might be able to discern in what phase of diffusion the \emph{gij
+bent} innovation is situated.
+
+To answer this question, we built a common linear regression model. We
+model the coefficients in term of the influence of the users, but we
+also supplement our analysis with the dialect and gender distinctions we
+discussed earlier. Bundling all these possible influences in the same
+model will ensure that we do not accidentally assign variation between
+language users to the wrong source. It will also function as an extra
+check for the results from Section~\ref{sec-group-variation}, as we will
+now be able to check statistically whether the distinctions we spotted
+in the visual exploration are statistically significant distinctions.
+Table~\ref{tbl-linear-predictors} gives an overview of the predictors
+that were used in the linear regression model.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+predictor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+explanation
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+predictor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+explanation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+dialect & the dialect area the tweet poster belongs to (``West
+Flemish'', ``East Flemish'', ``Brabantian'', ``Limburgish'') \\
+gender & the estimated gender of the tweet poster -- generated
+automatically \\
+influence & a metric expressing the relative influence of a language
+user within the Twitter network \\
+\caption{An overview of all predictors used in the linear regression
+model.}\label{tbl-linear-predictors}\tabularnewline
+\end{longtable}
+
+\begin{longtable}[]{@{}llllll@{}}
+
+\toprule\noalign{}
+term & coefficient & std. error & t value & p value & \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(Intercept) & 1.15 & 0.19 & 6.03 & \textless0.01 & * \\
+gender: female & -0.31 & 0.21 & -1.46 & 0.1455 & \\
+dialect: Limburgs & -1.37 & 0.35 & -3.87 & \textless0.01 & * \\
+dialect: Oost-Vlaams & -2.04 & 0.28 & -7.23 & \textless0.01 & * \\
+dialect: West-Vlaams & -1.41 & 0.33 & -4.29 & \textless0.01 & * \\
+influence & 0.31 & 0.12 & 2.58 & 0.0103 & * \\
+
+
+\caption{\label{tbl-linear-predictors}Results of the linear regression
+analysis. * indicates statistical significance}
+
+\tabularnewline
+\end{longtable}
+
+We will first go over the controlling variables we discussed earlier,
+and then move on to the influence predictor.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Intercept
+\end{enumerate}
+
+First, we look at the intercept of the model. Just like in
+Section~\ref{sec-controlling-predictors}, the intercept here expressed
+the ``default'' situation against which further corrections need to be
+understood. Here, the intercept expresses a language user \ldots{}
+
+\begin{itemize}
+\tightlist
+\item
+  \ldots{} from the Brabant dialect area
+\item
+  \ldots{} who is assumed to be male
+\item
+  \ldots{} with an influence of ``zero''
+\end{itemize}
+
+Our intercept starts from a value of 1.154, which shows a slight bias
+for innovative behaviour. All further corrections need to be understood
+relative to this value.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Gender
+\end{enumerate}
+
+We see that the distinction between users who are thought to be male and
+users who are thought to be female does not reach the significance
+threshold. Therefore, the differences which we discussed in
+Section~\ref{sec-group-variation} are not different enough to the degree
+that they are actually distinct. Still, the fact that the
+\emph{tendency} is clearly there is still interesting, and the reversal
+of the extreme values of course still holds.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Dialect area
+\end{enumerate}
+
+Next, we also see that there are significant differences between the
+reference dialect area (Brabant) and all other dialect areas. As was
+already clear from the visual inspection of the corrections per dialect
+area, we see that in non-Brabant areas, the corrections tend towards the
+conservative form, whereas Brabant area corrections are mostly
+innovative.
+
+In addition, we wanted to know whether there are also differences
+\emph{between} the non-Brabant dialact areas. To investigate this, we
+ran a post-hoc analysis through emmeans (Lenth 2024). In this post-hoc
+analysis, we check for each dialect area pair whether there are
+significant differences in individual variation between the two. We see
+in Table~\ref{tbl-posthoc-test} that there are \emph{no} further
+differences between the non-Brabant dialect areas. Our assessment of the
+two variation profiles was thus correct.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.3824}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1765}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1618}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1176}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1176}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0441}}@{}}
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+contrast
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+coefficient
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+std. error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+t value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+p value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Brabants ↔ Limburgs & 1.37 & 0.35 & 3.87 & \textless0.01 & * \\
+Brabants ↔ Oost-Vlaams & 2.04 & 0.28 & 7.23 & \textless0.01 & * \\
+Brabants ↔ West-Vlaams & 1.41 & 0.33 & 4.29 & \textless0.01 & * \\
+Limburgs ↔ Oost-Vlaams & 0.67 & 0.42 & 1.61 & 0.3713 & \\
+Limburgs ↔ West-Vlaams & 0.04 & 0.45 & 0.09 & 0.9998 & \\
+Oost-Vlaams ↔ West-Vlaams & -0.64 & 0.40 & -1.60 & 0.3788 & \\
+
+
+\caption{\label{tbl-posthoc-test}Results of the \texttt{emmeans} posthoc
+analysis for dialect area. * indicates statistical significance}
+
+\tabularnewline
+\end{longtable}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Network influence
+\end{enumerate}
+
+Finally, we look at the network influence parameter. Recall that our
+influence predictor expresses the (im)balance between the ``followers''
+and ``following'' metrics, with those users who are followed by more
+people than they follow themselves being attributed a larger influence.
+The regression table in Table~\ref{tbl-linear-predictors} shows that, as
+our influence metric increases, so does the probability for the use of
+\emph{gij bent}. This means that the more influential a speaker is in
+the Twitter network, the more likely they are to use the new, innovative
+\emph{gij bent} form. {[}Todo Julie uitleg hoe en waarom dit zo is{]}
+
+{[}network effect explanation{]}
+
+\section{Conclusion}\label{conclusion}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}algemeen idee van de individuele variatie{]}
+\item
+  {[}conclusies voor tussentaal{]}
+\item
+  {[}idee dat je op deze manier ook kunt vaststellen in welke fase van
+  de verspreiding een fenomeen zit{]}
+\end{itemize}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-auer_europe_2005}
+Auer, Peter. 2005. {``Europe's Sociolinguistic Unity, or: A Typology of
+European Dialect/Standard Constellations.''} \emph{Perspectives on
+Variation: Sociolinguistic, Historical, Comparative} 7: 7--42.
+\url{https://doi.org/10.1515/9783110909579}.
+
+\bibitem[\citeproctext]{ref-barabasi_emergence_1999}
+Barabasi, Albert-Laszlo. 1999. {``Emergence of Scaling in Random
+Networks.''} \emph{arXiv.org} 286 (5439): 509--12.
+\url{https://doi.org/10.1126/science.286.5439.509}.
+
+\bibitem[\citeproctext]{ref-brysbaert_dealing_2013}
+Brysbaert, Marc, and Kevin Diependaele. 2013. {``Dealing with Zero Word
+Frequencies: {A} Review of the Existing Rules of Thumb and a Suggestion
+for an Evidence-Based Choice.''} \emph{Behavior Research Methods} 45
+(2): 422--30.
+
+\bibitem[\citeproctext]{ref-ellis_what_2012}
+Ellis, Nick C. 2012. {``What Can We Count in Language, and What Counts
+in Language Acquisition, Cognition, and Use?''} In \emph{Frequency
+{Effects} in {Language} {Learning} and {Processing}}, edited by Stefan
+Th. Gries and Dagmar Divjak, 1:7--34. De Gruyter Mouton.
+\url{https://doi.org/10.1515/9783110274059.7}.
+
+\bibitem[\citeproctext]{ref-francois_trees_2014}
+François, Alexandre. 2014. {``Trees, {Waves} and {Linkages}: {Models} of
+{Language} {Diversification}.''} In \emph{The {Routledge} {Handbook} of
+{Historical} {Linguistics}}, edited by Claire Bowern and Evans Bethwyn,
+161--89. Routledge. \url{https://doi.org/10.4324/9781315794013.ch6}.
+
+\bibitem[\citeproctext]{ref-friedman_regularization_2010}
+Friedman, Jerome, Robert Tibshirani, and Trevor Hastie. 2010.
+{``Regularization {Paths} for {Generalized} {Linear} {Models} via
+{Coordinate} {Descent}.''} \emph{Journal of Statistical Software} 33
+(1): 1--22. \url{https://doi.org/10.18637/jss.v033.i01}.
+
+\bibitem[\citeproctext]{ref-geeraerts_een_2000}
+Geeraerts, Dirk. 2000. {``Een Zondagspak? {Het} {Nederlands} in
+{Vlaanderen}: Gedrag, Beleid, Attitudes.''} \emph{Ons Erfdeel} 44:
+337--44.
+\url{https://wwwling.arts.kuleuven.be/qlvl/PDFPublications/01Eenzondagspak.pdf}.
+
+\bibitem[\citeproctext]{ref-geeraerts_lectal_2005}
+---------. 2005. {``Lectal Variation and Empirical Data in Cognitive
+Linguistics.''} In \emph{Cognitive Linguistics: Internal Dynamics and
+Interdisciplinary Interaction}, 32:163--89. Cognitive Linguistics
+Research. Berlin: Mouton de Gruyter.
+\url{https://doi.org/10.1515/9783110197716.2.163}.
+
+\bibitem[\citeproctext]{ref-ghyselen_verticale_2016}
+Ghyselen, Anne-Sophie. 2016. {``{Verticale structuur en dynamiek van het
+gesproken Nederlands in Vlaanderen: een empirische studie in Ieper, Gent
+en Antwerpen}.''} PhD thesis, {Ghent University}.
+
+\bibitem[\citeproctext]{ref-grafmiller_general_2018}
+Grafmiller, Jason, Benedikt Szmrecsanyi, Melanie Röthlisberger, and
+Benedikt Heller. 2018. {``General Introduction: {A} Comparative
+Perspective on Probabilistic Variation in Grammar.''} \emph{Glossa: A
+Journal of General Linguistics} 3 (1).
+\url{https://doi.org/10.5334/gjgl.690}.
+
+\bibitem[\citeproctext]{ref-gries_most_2015}
+Gries, Stefan Thomas. 2015. {``The Most Under-Used Statistical Method in
+Corpus Linguistics: Multi-Level (and Mixed-Effects) Models.''}
+\emph{Corpora} 10 (1): 95--125.
+\url{https://doi.org/10.3366/cor.2015.0068}.
+
+\bibitem[\citeproctext]{ref-hastie_generalized_1987}
+Hastie, Trevor, and Robert Tibshirani. 1987. {``Generalized {Additive}
+{Models}: {Some} {Applications}.''} \emph{Journal of the American
+Statistical Association} 82 (398): 371--86.
+\url{https://doi.org/10.1080/01621459.1987.10478440}.
+
+\bibitem[\citeproctext]{ref-impe_vlamingen_2007}
+Impe, Leen, and Dirk Speelman. 2007. {``Vlamingen En Hun (Tussen) Taal:
+{Een} Attitudineel Mixed Guise-Onderzoek.''}
+\emph{Handelingen-Koninklijke Zuid-Nederlandse Maatschappij Voor Taal-En
+Letterkunde En Geschiedenis} 61.
+
+\bibitem[\citeproctext]{ref-keller_language_1994}
+Keller, Rudi. 1994. \emph{On {Language} {Change}: {The} {Invisible}
+{Hand} in {Language}}. Psychology Press.
+
+\bibitem[\citeproctext]{ref-kretzschmar_language_2015}
+Kretzschmar, William A. 2015. \emph{Language and {Complex} {Systems}}.
+Cambridge: Cambridge University Press.
+\url{https://doi.org/10.1017/CBO9781316179017}.
+
+\bibitem[\citeproctext]{ref-labov_study_1968}
+Labov, William et al. 1968. {``A Study of the Non-Standard English of
+Negro and Puerto Rican Speakers in New York City.''}
+
+\bibitem[\citeproctext]{ref-emmeans}
+Lenth, Russell V. 2024. {``Emmeans: Estimated Marginal Means, Aka
+Least-Squares Means.''} \url{https://github.com/rvlenth/emmeans}.
+
+\bibitem[\citeproctext]{ref-milroy_belfast_1978}
+Milroy, James, and Lesley Milroy. 1978. {``Belfast: Change and Variation
+in an Urban Vernacular.''} \emph{Sociolinguistic Patterns in British
+English} 19: 19--36.
+
+\bibitem[\citeproctext]{ref-nielsen_participation_2006}
+Nielsen, Jakob. 2006. {``Participation {Inequality}: {The} 90-9-1 {Rule}
+for {Social} {Features}.''} \emph{Nielsen Norman Group}.
+\url{https://www.nngroup.com/articles/participation-inequality/}.
+
+\bibitem[\citeproctext]{ref-r_language_2021}
+R Core Team. 2021. {``R: A Language and Environment for Statistical
+Computing.''} Vienna, Austria: R Foundation for Statistical Computing.
+\url{https://www.R-project.org/}.
+
+\bibitem[\citeproctext]{ref-sevenants_elastic_2024}
+Sevenants, Anthe. 2023. {``ElasticToolsR.''} Zenodo.
+\url{https://doi.org/10.5281/zenodo.8113291}.
+
+\bibitem[\citeproctext]{ref-sevenants_zijt_2024}
+---------. 2024a. {``{`{Zijt} Gij Dat of Bent Gij Dat?'}: {Een}
+Alternantiestudie van de Tweede Persoon Enkelvoud van Zijn in {Vlaamse}
+Tussentaal,''} January.
+\url{https://doi.org/10.5117/TET2023.2.003.SEVE}.
+
+\bibitem[\citeproctext]{ref-sevenants_gender_2024}
+---------. 2024b. {``Gender-from-Name-r.''} Zenodo.
+\url{https://doi.org/10.5281/zenodo.14013816}.
+
+\bibitem[\citeproctext]{ref-sevenants_neighbours_2021}
+Sevenants, Anthe, and Dirk Speelman. 2021. {``Keeping up with the
+Neighbours-an Agent-Based Simulation of the Divergence of the Standard
+Dutch Pronunciations in the Netherlands and Belgium.''}
+\emph{Computational Linguistics in the Netherlands Journal} 11: 5--26.
+\url{https://clinjournal.org/clinj/article/view/118}.
+
+\bibitem[\citeproctext]{ref-sevenants_elastic_to_appear}
+Sevenants, Anthe, Freek Van de Velde, and Dirk Speelman. n.d.
+{``Investigating Lexical-Semantic Effects on Morphosyntactic Variation
+Using Elastic Net Regression.''} \emph{Corpus Linguistics and Linguistic
+Theory}, Accepted.
+
+\bibitem[\citeproctext]{ref-taeldeman_zich_2008}
+Taeldeman, Johan. 2008. {``Zich Stabiliserende Grammaticale Kenmerken in
+{Vlaamse} Tussentaal.''} \emph{Taal En Tongval} 60 (1): 26--50.
+
+\bibitem[\citeproctext]{ref-vandekerckhove_cbd_2005}
+Vandekerckhove, Reinhild. 2005. {``Belgian Dutch Versus Netherlandic
+Dutch: New Patterns of Divergence? On Pronouns of Address and
+Diminutives.''} \emph{Multilingua} 24 (4): 379--97.
+\url{https://doi.org/10.1515/mult.2005.24.4.379}.
+
+\bibitem[\citeproctext]{ref-vandekerckhove_perception_2007}
+Vandekerckhove, Reinhild, and Poi Cuvelier. 2007. {``The Perception of
+Exclusion and Proximity Through the Use of {Standard} {Dutch},
+{`Tussentaal'} and Dialect in {Flanders}.''} In \emph{Multilingualism
+and Exclusion. {Policy} Practice and Prospects}, 241--56. Studies in
+{Language} {Policy} in {South}-{Africa}. Pretoria: Van Schaik
+Publishers.
+
+\bibitem[\citeproctext]{ref-zipf_psycho-biology_1965}
+Zipf, George Kingsley. 1965. \emph{The {Psycho}-{Biology} of
+{Language}}. Cambridge, Massachusetts: MIT Press.
+
+\end{CSLReferences}
+
+
+
+
+\end{document}
