@@ -5,6 +5,8 @@ library(tidycat)
 
 df <- read.delim("../data/tweets_geo_full.tsv")
 
+num_tweets <- dim(df)[1]
+
 MIN_TWEET_THRESHOLD = 10
 
 # Make sure the factor levels are set up so *bent* is the non-default level
@@ -45,6 +47,9 @@ colnames(df)[colnames(df) == "norm_long"] <- "long"
 user_id_counts <- table(df$user_id)
 df <- subset(df, user_id %in%
               names(user_id_counts[user_id_counts >= MIN_TWEET_THRESHOLD]))
+
+num_tweets_filtered <- dim(df)[1]
+num_users_filtered <- length(unique(df$user_id))
 
 # Only one tweet per user
 one_user_one_tweet <- function(df) {
