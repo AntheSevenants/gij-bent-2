@@ -126,7 +126,7 @@ format_posthoc_table <- function(df) {
   df$null <- NULL
   df$null.value <- NULL
   df$contrast <- gsub("[()]", "", df$contrast)
-  df$contrast <- gsub("-", "↔", df$contrast)
+  df$contrast <- gsub(" - ", " ↔ ", df$contrast)
 
   df$sig <- ifelse(df$adj.p.value <= 0.05, "*", "")
 
