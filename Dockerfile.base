@@ -4,10 +4,12 @@
 FROM rocker/rstudio:4
 
 # First, I copy all dependencies into the container
-COPY analysis/renv.lock analysis/renv.lock
+COPY analysis/renv.lock /home/rstudio/analysis/renv.lock
 
 # Install some linux libraries that R packages need
 RUN apt-get update && apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libodbc2 libxt6 libudunits2-dev libgdal-dev libgeos-dev libproj-dev lsof
+
+WORKDIR /home/rstudio/analysis
 
 # Then, I install 'renv', and then restore all dependencies
 # renv will download and install everything as needed

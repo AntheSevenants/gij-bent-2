@@ -1,4 +1,7 @@
 library(stringr)
+library(emmeans)
+library(broom)
+library(tidycat)
 
 df <- read.delim("../data/tweets_geo_full.tsv")
 
