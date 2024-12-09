@@ -58,8 +58,6 @@ formatp <- function(number) {
 suppress_gloss <- FALSE
 ```
 
-
-
 ```{r load-coefficients}
 #| output: false
 
@@ -79,7 +77,6 @@ coefficients$log_tweet_count = log(coefficients$user_tweet_count)
 coefficients$influence = log((coefficients$user_followers_count + 0.001) / (coefficients$user_friends_count + 0.001))
 
 ```
-
 
 ```{r regression-fit-format}
 format_num_col <- function(p_value) {
@@ -140,6 +137,9 @@ format_posthoc_table <- function(df) {
   return(df)
 }
 ```
+
+
+
 
 ## Introduction {#sec-introduction}
 
@@ -247,6 +247,9 @@ In general, the control variable results are comparable to the results from @sev
 
 [^anomaly]: The results for the West-Flemish dialect area need to be interpreted in conjunction with the "distance from northern Antwerp" parameter. The regression analysis assumes a zero distance from Antwerp from the intercept, but this does not make sense for dialect areas other than Brabant. Therefore, if we apply the extra corrections expressed in "distance from northern Antwerp", we get the expected negative correction towards the conservative form (`r 121 * -0.017`). Still, the *gij* pronoun is quite rare in this area, so the West-Flemish results should be treated with caution.
 
+
+
+
 ```{r #tbl-other-coefficients}
 #| label: tbl-other-coefficients
 #| tbl-cap: "Overview of the controlling predictors predictors, their values and whether they were retained by the elastic net regression" 
@@ -278,6 +281,9 @@ rownames(other_coefficients) <- NULL
 other_coefficients
 ```
 
+
+
+
 ### Individual variation
 
 In this section, we will go over the coefficients that were computed for each language user. We will first look at the variation patterns globally, and then zoom in on the differences between different groups of language users. We will also attempt to model the coefficients in order to find relations between them.
@@ -288,6 +294,9 @@ First, we will look at the coefficient globally. The density plot of the variati
 
 Note that each of the two different distributions might not consist of a homogeneous type of people. For example, the innovative corrections might include people in regions where the innovative form is rarely used, and who use the innovative form nonetheless. At the same time, innovative corrections might also stem from people in an already innovative area who "out-innovate" the expectations, using the innovative form even more often than is expected. We will attempt to tease out this distinction in the next section.
 
+
+
+
 ```{r #fig-general-density}
 #| fig-cap: A density plot describing the individual variation coefficients in our dataset. The left side of the plot (negative coefficients) shows corrections towards the conservative form, the right side of the plot (positive coefficients) shows corrections towards the innovative form.
 coefficients %>%
@@ -296,6 +305,9 @@ coefficients %>%
   geom_vline(xintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
 
+
+
+
 #### Variation patterns among groups {#sec-group-variation}
 
 ##### Gender
@@ -303,6 +315,9 @@ coefficients %>%
 Next, we will look at the patterns of variation among different groups. @fig-gender-violin shows the distribution of variation coefficients between men and women. There are two key points. First, we see that men and women have comparable profiles, with the same bi-modal trend seen in the general coefficients overview. We will address this bi-modality in the section on dialect variation patterns.
 
 Secondly, we see that the most extreme innovative corrections in the plot stem from men, while the most extreme conservative corrections stem from women. This is peculiar, in the sense that this pattern "reverses" what we know from from @sevenants_zijt_2024 and @sec-controlling-predictors. However, keep in mind that the plot shows *corrections* on top of *expectations*. Though there are general trends that dictate a certain preference for men or women, this does not mean that *all* individuals from that group follow that same pattern. @fig-gender-violin shows this reversal: there are ample outlier speakers who deviate from what is typically expected from their gender, and this also highlights the need to be cautious when making generalisations in this regard. At the same time, the distributions between men and women are still similar enough that we likely cannot speak of distinctly different profiles. We will come back to this in our regression model of the coefficients in @sec-regression.
+
+
+
 
 ```{r #fig-gender-violin}
 #| fig-cap: A violin plot describing the individual variation coefficients for men and women. A wider figure means more data for that y value.
@@ -317,9 +332,15 @@ coefficients %>%
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
 
+
+
+
 ##### Dialect
 
 Next, we look at the dispersion of variation by Flemish dialect region in @fig-region-violin. Here, we do not see a "reversal" pattern, in contrast to @fig-gender-violin.  There seem to be two variation profiles: a Brabant variation profile, and a non-Brabant variation profile. The Brabant variation profile shows how in the Brabant dialect region, there is  a slight preference for innovation at the upper end of the coefficient values, with declining coefficents towards conserative corrections. In the three non-Brabant regions, we see that there are some innovators, but they are generally few. In these dialects, the values gravitate towards more conservative corrections. With these results, we have an explanation for the bi-modal nature of @fig-general-density: the first distribution, centred *below* zero, consists mostly of language users from non-Brabant dialect areas who are even more conservative than we expect from their region, and therefore correct "downwards". The second distribution, centred *above* zero, consists mostly of eager innovators from the already innovative Brabant dialect area. As avid users of the innovative form, they correct "upwards" in our plots.
+
+
+
 
 ```{r #fig-region-violin}
 #| fig-cap: A violin plot describing the individual variation coefficients by region. A wider figure means more data for that y value.
@@ -333,6 +354,9 @@ coefficients %>%
   guides(fill=guide_legend(title="dialect area")) +
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
+
+
+
 
 We see in @fig-region-violin that, while they are few, innovators in non-Brabant dialect areas *do* exist. One might wonder what the profile of these rare innovators is. Perhaps they they live close to the border in their specific dialect regions, and are therefore "atypically" innovative for their region. To answer this question, we built a Generalised Additive Model or GAM [@hastie_generalized_1987]. A GAM can fit smooth curves to "wavy" data. If extrapolated to two dimensions, it allows one to create "weatherman-like" heatmaps for linguistic data. In this case, we modelled the elastic net coefficients on the basis of the latitude and longitude values associated with the places in the profiles of the Twitter users, in addition to the interaction of the two axes ("tensor smooth", $te$). This gives rise to the following equation:
 
@@ -367,9 +391,15 @@ $$
 
 Our influence metric is based on the priming ratio from @sevenants_elastic_to_appear and hinges on logarithm and Laplace smoothing [@brysbaert_dealing_2013]. The logarithm is a key operation in order to compress the wide numeric range found in follower and following counts. Where some users have thousands of followers, some only have a few. The use of the logarithm scales this discrepancy down. In addition, we use Laplace smoothing in order to avoid division by zero, in the event that users do not follow other users. The mean influence value among our speakers is `r coefficients$influence %>% mean() %>% formatd()` (median `r coefficients$influence %>% median() %>% formatd()`). The boxplot in @fig-influence shows that our dataset generally consists of more influential figures, i.e. users who have more followers than they themselves follow people. This is expected, since generally speaking, 90% of social media users only read, but never post themselves [@nielsen_participation_2006]. Since our dataset consists of posts, it makes sense that our dataset mainly engages with the other 10%, the active users.
 
+
+
+
 ```{r #fig-influence}
 boxplot(coefficients$influence, horizontal = T)
 ```
+
+
+
 
 In our case, we want to know how the language users who are thought to be influential in our network behave. Are they are the forefront of innovation, or are they conservative? Depending on what profile we find, we might be able to discern in what phase of diffusion the *gij bent* innovation is situated.
 
@@ -383,6 +413,9 @@ To answer this question, we built a common linear regression model. We model the
 
 : An overview of all predictors used in the linear regression model. {#tbl-linear-predictors}
 
+
+
+
 ```{r #tbl-linear-predictors}
 #| tbl-cap: "Results of the linear regression analysis. * indicates statistical significance"
 fit <- lm(coefficient ~ gender + dialect + influence, data=coefficients %>% no_unknown_gender())
@@ -393,6 +426,9 @@ coefficients_lm_df$term <- gsub("(_is_dialect_)", "", coefficients_lm_df$term)
 
 coefficients_lm_df
 ```
+
+
+
 
 We will first go over the controlling variables we discussed earlier, and then move on to the influence predictor.
 
@@ -416,6 +452,9 @@ Next, we also see that there are significant differences between the reference d
 
 In addition, we wanted to know whether there are also differences *between* the non-Brabant dialact areas. To investigate this, we ran a post-hoc analysis through emmeans [@emmeans]. In this post-hoc analysis, we check for each dialect area pair whether there are significant differences in individual variation between the two. We see in @tbl-posthoc-test that there are *no* further differences between the non-Brabant dialect areas. Our assessment of the two variation profiles was thus correct.
 
+
+
+
 ```{r tbl-posthoc-test}
 #| tbl-cap: Results of the `emmeans` posthoc analysis for dialect area. * indicates statistical significance
 posthoc <- emmeans(fit,
@@ -428,6 +467,9 @@ posthoc_df$contrast <- gsub("(_is_dialect_)", "", posthoc_df$contrast)
 
 posthoc_df
 ```
+
+
+
 
 4. Network influence
 
