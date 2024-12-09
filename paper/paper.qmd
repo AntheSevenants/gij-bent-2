@@ -383,17 +383,17 @@ We will first go over the controlling variables we discussed earlier, and then m
 
 1. Intercept
 
-First, we look at the intercept of the model. Just like in TODO, the intercept here expressed the "default" situation against which further corrections need to be understood. Here, the intercept expresses a language user ...
+First, we look at the intercept of the model. Just like in @sec-controlling-predictors, the intercept here expressed the "default" situation against which further corrections need to be understood. Here, the intercept expresses a language user ...
 
 - ... from the Brabant dialect area
 - ... who is assumed to be male
 - ... with an influence of "zero"
 
-Our intercept starts from a value of TODO, which shows a slight bias for innovative behaviour. All further corrections need to be understood relative to this value.
+Our intercept starts from a value of `r fit %>% tidy %>% filter(term == "(Intercept)") %>% .$estimate %>% formatd(3)`, which shows a slight bias for innovative behaviour. All further corrections need to be understood relative to this value.
 
 2. Gender
 
-We see that the distinction between users who are thought to be male and users who are thought to be female does not reach the significance threshold. Therefore, the differences which we discussed in TODO are not different enough to the degree that they are actually distinct. Still, the fact that the *tendency* is clearly there is still interesting, and the reversal of the extreme values of course still holds.
+We see that the distinction between users who are thought to be male and users who are thought to be female does not reach the significance threshold. Therefore, the differences which we discussed in @sec-group-variation are not different enough to the degree that they are actually distinct. Still, the fact that the *tendency* is clearly there is still interesting, and the reversal of the extreme values of course still holds.
 
 3. Dialect area
 
