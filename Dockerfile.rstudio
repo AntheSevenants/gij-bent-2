@@ -3,6 +3,9 @@ FROM anthesevenants/gij-bent-2:base
 
 RUN apt-get install -y lsof
 
+RUN R -q -e "install.packages('rmarkdown', repos = c(CRAN = 'https://cloud.r-project.org'))"
+RUN R -q -e "install.packages('knitr', repos = c(CRAN = 'https://cloud.r-project.org'))"
+
 # Let's set the working directory correctly (also for the R environment itself)
 RUN echo "setwd(\"/home/rstudio/gij-bent-2/analysis/\")" > ~/../home/rstudio/.Rprofile
 RUN mkdir -p "/home/rstudio/.local/share/rstudio/projects_settings/"
