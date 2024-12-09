@@ -157,7 +157,8 @@ Contrastively, the advent of social media offers a unique opportunity for variat
 
 [ @ Julie: misschien hier een stuk over het reeds bestaande onderzoek naar individuele variatie. hoeft niet veel te zijn maar nu staat er niets en dat is misschien niet top ]
 
-Another aspect of of the complex-adaptive system of language are the connections between people. Humans are embedded in larger social networks, which are formed according to a so-called "power law". [uitleg scale-free netwerk]
+Another aspect of of the complex-adaptive system of language are the connections between people. Humans are embedded in larger social networks, which are formed according to a so-called "power law". This means the network has a small number of people with a large number of connections, supplemented by many people who have relatively few connections [@barabasi_emergence_1999].
+
 Linguistically, the effects of networks has been studied before [stuk Julie].
 
 - leaders / loaners
