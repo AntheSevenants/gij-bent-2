@@ -141,7 +141,7 @@ format_posthoc_table <- function(df) {
 }
 ```
 
-## Introduction {#sec:introduction}
+## Introduction {#sec-introduction}
 
 One of the key ideas from usage-based linguistics is that language is not a system that exists just "by itself". Rather, it is widely accepted within this branch that language arises out of the many interactions that language users have with each other [@keller_language_1994]. As such, language becomes a "complex-adaptive system" [@ellis_what_2012;@kretzschmar_language_2015], a system without a single authoritative control, constructed through the simple yet numerous interactions of its components, language users. While each speaker of a language (be it Dutch, English or Maori) has their own personalised representation of the rules and constraints that they think make up that language, these representations have enough in common in order to warrant talking about a shared "code", or more broadly, a language.
 
@@ -341,7 +341,7 @@ In general, then, we see that there are two trends in the variation coefficients
 
 #### Network effects {#sec-regression}
 
-As mentioned in INTRODUCTION TODO, the networked aspect of social media data provides an opportunity for researchers to investigate which people use what variant, and what that says about the diffusion of a new variant. Since our dataset comes from the Twitter platform, we also dispose of metrics which define a user's relative popularity on the platform. The first metric, "Followers", tallies how many other users want to see a user's posts appear in their own social media feed. Users with a large number of followers have a broad reach, and therefore have the possibility to be influential in their language use. The second metric, "Following", states how many other people's posts a user wants to see in their social media feed. Users who follow a large number of other users have the opportunity of being exposed to a larger linguistic pallette -- though this need not necessarily be the case.
+As mentioned in @sec-introduction, the networked aspect of social media data provides an opportunity for researchers to investigate which people use what variant, and what that says about the diffusion of a new variant. Since our dataset comes from the Twitter platform, we also dispose of metrics which define a user's relative popularity on the platform. The first metric, "Followers", tallies how many other users want to see a user's posts appear in their own social media feed. Users with a large number of followers have a broad reach, and therefore have the possibility to be influential in their language use. The second metric, "Following", states how many other people's posts a user wants to see in their social media feed. Users who follow a large number of other users have the opportunity of being exposed to a larger linguistic pallette -- though this need not necessarily be the case.
 
 To assess the influence of the users in our dataset within the larger Twitter network, we devised a metric which is based on the ratio between "Followers" and "Following". The idea of the metric is that users who have a large number of followers, yet follow few people themselves, have a larger relative influence than users without this asymmetry. Our influence metric is shown in Equation TODO.
 
