@@ -16,6 +16,13 @@ format:
     toc: true
   docx:
     toc: false
+  pdf:
+    geometry:
+      - top=20mm
+      - left=20mm
+      - right=20mm
+      - bottom=20mm
+      - heightrounded
 editor: source
 title-block-banner: true
 bibliography: references.bib
@@ -25,7 +32,7 @@ toc-location: left
 tbl-cap-location: bottom
 fig-cap-location: bottom
 number-sections: true
-reference-location: margin
+#reference-location: margin
 csl: chicago-author-date.csl
 df-print: kable
 abstract: |
