@@ -14,3 +14,6 @@ RUN chmod -R 777 "/home/rstudio/.local/"
 RUN chmod -R 777 "/root/.local/"
 RUN echo "/home/rstudio/gij-bent-2/analysis/gij-bent-2.Rproj" > "/home/rstudio/.local/share/rstudio/projects_settings/last-project-path"
 RUN echo "/home/rstudio/gij-bent-2/analysis/gij-bent-2.Rproj" > "/root/.local/share/rstudio/projects_settings/last-project-path"
+
+RUN R -q -e "install.packages('tinytex', repos = c(CRAN = 'https://cloud.r-project.org'))"
+RUN R -q -e "tinytex::install_tinytex()"
