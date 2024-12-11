@@ -8,3 +8,8 @@ output/
 data/
 
 quarto
+
+*.tex
+*.docx
+*.html
+*.pdf
