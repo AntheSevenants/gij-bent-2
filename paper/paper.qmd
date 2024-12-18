@@ -166,7 +166,7 @@ It is essential to recognize that the widespread changes observed across entire 
 
 Another aspect of the complex-adaptive system of language are the connections between people. Humans are embedded in larger social networks, which are formed according to a so-called "power law". This means the network has a small number of people with a large number of connections, supplemented by many people who have relatively few connections [@barabasi_emergence_1999].
 
-Linguistically, the effects of networks has been studied before [stuk Julie].
+Linguistically, the effects of networks have been studied before. Milroy and Milroy [1985 TODO], who base themselves on Granovetter [1973 TODO] and Rogers and Shoemaker [1971 TODO], demonstrated that in a network both weak and strong ties are essential for the propagation of linguistic change. Strong ties (e.g. close friends and family) maintain and reinforce linguistic norms within tight-knit groups, resisting linguistic innovation. In contrast, weak ties (e.g. acquaintances) form bridges between groups, facilitate the spread of linguistic innovations. Weak ties are especially crucial for exposing individuals to linguistic features or patterns that are not present within their immediate, tightly connected group, enabling the flow of new linguistic forms across disparate groups, broadening the reach of linguistic innovations. Once exposed to these new forms, individuals connected through weak ties may adopt them and, through their strong ties, introduce them to their close-knit circles. 
 
 - leaders / loaners
 - gedrag van centrale figuren
