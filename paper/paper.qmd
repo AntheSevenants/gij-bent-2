@@ -242,7 +242,7 @@ In this section, we will go over the results produced by our elastic net regress
 
 ### Controlling predictors {#sec-controlling-predictors}
 
-@tbl-other-coefficients gives an overview of the "control" coefficients that were included in order to have multifactorial control for the individual variation. Since the innovative *bent* variant was encoded as outcome "1", and the conservative *zijt* was encoded as outcome "0", positive coefficients mean a a correction towards the innovative variant, while negative corrections mean a correction towards the conservative variant. These corrections must be interpreted from the situation expressed in the intercept, a "reference situation" that is defined as follows:
+@tbl-other-coefficients gives an overview of the "control" coefficients that were included in order to have multifactorial control for the individual variation. Since the innovative *bent* variant was encoded as outcome "1", and the conservative *zijt* was encoded as outcome "0", positive coefficients mean a correction towards the innovative variant, while negative corrections mean a correction towards the conservative variant. These corrections must be interpreted from the situation expressed in the intercept, a "reference situation" that is defined as follows:
 
 - formal situation (no reply or interaction)
 - at distance "0" from northern Antwerp
