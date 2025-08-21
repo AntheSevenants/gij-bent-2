@@ -436,9 +436,7 @@ posthoc_df
 
 4. Network influence
 
-Finally, we look at the network influence parameter. Recall that our influence predictor expresses the (im)balance between the "followers" and "following" metrics, with those users who are followed by more people than they follow themselves being attributed a larger influence. The regression table in @tbl-linear-predictors shows that, as our influence metric increases, so does the probability for the use of *gij bent*. This means that the more influential a speaker is in the Twitter network, the more likely they are to use the new, innovative *gij bent* form. [Todo Julie uitleg hoe en waarom dit zo is]
-
-[network effect explanation]
+Finally, we look at the network influence parameter. Recall that our influence predictor expresses the (im)balance between the "followers" and "following" metrics, with those users who are followed by more people than they follow themselves being attributed a larger influence. The regression table in @tbl-linear-predictors shows that, as our influence metric increases, so does the probability for the use of *gij bent*. This means that the more influential a speaker is in the Twitter network, the more likely they are to use the new, innovative *gij bent* form. In other words, the innovative *gij bent* form is not confined to peripheral innovators but is actively promoted by more central and prestigious figures in the Twitter network. This finding aligns with network-based theories of diffusion, in which highly connected early adopters play a crucial role in amplifying and legitimizing innovations [@rogers_diffusion_2003: 282-283]. It also indicates that *gij bent* may have progressed beyond the initial stage of peripheral innovation, i.e. the stage in which the innovators are crucial, and entered a phase in which socially visible and influential users help to normalize the form.
 
 ## Conclusion
 
