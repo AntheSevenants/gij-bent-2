@@ -168,7 +168,7 @@ Another aspect of the complex-adaptive system of language are the connections be
 
 Linguistically, the effects of networks have been studied before. @milroy_linguistic_1985, who base themselves on @granovetter_strength_1973 and @rogers_communication_1971, demonstrated that in a network both weak and strong ties are essential for the propagation of linguistic change. Strong ties (e.g. close friends and family) maintain and reinforce linguistic norms within tight-knit groups, resisting linguistic innovation. In contrast, weak ties (e.g. acquaintances) form bridges between groups, facilitate the spread of linguistic innovations. Weak ties are especially crucial for exposing individuals to linguistic features or patterns that are not present within their immediate, tightly connected group, enabling the flow of new linguistic forms across disparate groups, broadening the reach of linguistic innovations. Once exposed to these new forms, individuals connected through weak ties may adopt them and, through their strong ties, introduce them to their close-knit circles. This dynamic does not affect all individuals equally: some are positioned to introduce innovations into the network, while others play a crucial role in amplifying and spreading them.
 
-Within the propagation of linguistic change, different roles can be distinguished. Innovators, who are hypothesized to be less central and only loosely connected to others through weak ties, acquiring novel ideas from outside their immediate community [@rogers_diffusion_2003: 282-283]. Early adopters, by contrast, are hypothesized to be more centrally positioned and to enjoy a higher degree of connectivity within the population. Through their many strong ties, they amplify and legitimize the innovation, spreading it efficiently across their dense local networks [@rogers_diffusion_2003: 282-283]. In this way, innovators and early adopters together bridge the gap between the periphery and the core of a community, ensuring that new linguistic forms do not remain isolated but instead gain broader social traction [@granovetter_strength_1973;@milroy_linguistic_1985]. The idea that innovation originates in the periphery of a network before it can spread has been attested before in network studies [@van_de_leemput_transformation_2024], but not whithin linguistics.
+Within the propagation of innovations, different roles can be distinguished. Innovators, who are less central and only loosely connected to others through weak ties, acquiring novel ideas from outside their immediate community [@rogers_diffusion_2003: 282-283]. Early adopters, by contrast, are more centrally positioned and enjoy a higher degree of connectivity within the population. Through their many strong ties, they amplify and legitimize the innovation, spreading it efficiently across their dense local networks [@rogers_diffusion_2003: 282-283]. In this way, innovators and early adopters together bridge the gap between the periphery and the core of a community, ensuring that new linguistic forms do not remain isolated but instead gain broader social traction [@granovetter_strength_1973;@milroy_linguistic_1985]. The idea that innovation originates in the periphery of a network before it can spread has been attested before in network studies [@van_de_leemput_transformation_2024], but not whithin linguistics.
 
 Except for some (often small-scale) studies [e.g. @labov_study_1968;@milroy_belfast_1978;@nevalainen_social_2015;@sharma_scalar_2017;@paradowski_how_2022] and simulations [@ke_language_2008;@ogura_dynamic_2008], it has been near impossible to get an elaborate insight into the social relationships of people on a large scale, let alone how these relationships relate to language. Again, social media offer an opportunity here. While it is not practical to get a full network of *all* social media users, we *can* get information on how "connected" a particular user is. Through metrics like "followers" and "following", we know how many connections social media users have. This allows us to get an idea of the centrality of a user in the larger social media network, even if we do not know the full network itself. This brings us to the second research question in this study:
 
@@ -437,6 +437,60 @@ posthoc_df
 4. Network influence
 
 Finally, we look at the network influence parameter. Recall that our influence predictor expresses the (im)balance between the "followers" and "following" metrics, with those users who are followed by more people than they follow themselves being attributed a larger influence. The regression table in @tbl-linear-predictors shows that, as our influence metric increases, so does the probability for the use of *gij bent*. This means that the more influential a speaker is in the Twitter network, the more likely they are to use the new, innovative *gij bent* form. In other words, the innovative *gij bent* form is not confined to peripheral innovators but is actively promoted by more central and prestigious figures in the Twitter network. This finding aligns with network-based theories of diffusion, in which highly connected early adopters play a crucial role in amplifying and legitimizing innovations [@rogers_diffusion_2003: 282-283]. It also indicates that *gij bent* may have progressed beyond the initial stage of peripheral innovation, i.e. the stage in which the innovators are crucial, and entered a phase in which socially visible and influential users help to normalize the form.
+
+The observed synchronic variation can also be interpreted through the framework of binary language change, where a new variant, *gij bent*, competes with an older one, *gij zijt*. Such binary changes are typically modeled using an S-curve [@speelman_logistic_2014], which plots the cumulative adoption of the innovation over time. This S-curve has a bell-shaped counterpart, which does not capture the cumulative adoption, but instead captures the rate of adoption at any given point in time: few individuals adopt at the very beginning, adoption peaks as the innovation gains momentum, and then levels off once most speakers have shifted. Diffusion research has shown that the individuals driving this process can be categorized into five adopter groups, defined mathematically by standard deviations around the mean adoption time [@rogers_diffusion_2003: PAGES]: innovators, early adopters, early majority, late majority, and laggards (see FIGURE BELOW). As already hinted at in @sec-introduction, each of these categories is embedded in the network in a different way. Innovators, positioned at the periphery and connected through weak ties, acquire innovations from outside their immediate community and initiate change. Early adopters, in contrast, are more centrally embedded and exert strong influence through their many strong ties, thereby accelerating diffusion and granting legitimacy to the innovation [REFS]. Our finding that more influential Twitter users are more likely to employ *gij bent* suggests that this form has moved beyond the initial innovator stage and is now being amplified by early adopters. In this way, we can infer in which stage of the S-curve the change is situated: between the second and the first standard deviation before the mean.
+
+
+```{r adopter-categories}
+# Load libraries
+library(ggplot2)
+
+# Simulated time steps
+time <- seq(0, 20, 0.1)
+
+# Logistic S-curve (cumulative adoption)
+s_curve <- 100 / (1 + exp(-0.6 * (time - 10)))
+
+# Bell curve (adoption rate, derivative of logistic)
+bell_curve <- dnorm(time, mean = 10, sd = 2.5) * 100
+
+# Combine into dataframe
+df <- data.frame(time, s_curve, bell_curve)
+
+# Define cutoffs for adopter categories
+mean_time <- 10
+sd_time <- 2.5
+cuts <- data.frame(
+  x = c(mean_time - 2*sd_time, mean_time - sd_time, mean_time,
+        mean_time + sd_time, mean_time + 2*sd_time),
+  label = c("Innovators", "Early Adopters", "Early Majority", 
+            "Late Majority", "Laggards"),
+  col = c("red", "orange", "green3", "darkgreen", "blue")
+)
+
+# Plot
+ggplot(df, aes(x = time)) +
+  geom_line(aes(y = s_curve, colour = "S-curve (Cumulative Adoption)"), size = 1) +
+  geom_line(aes(y = bell_curve, colour = "Bell Curve (Adoption Rate)"), size = 1, linetype = "dashed") +
+  geom_vline(data = cuts, aes(xintercept = x, colour = label), linetype = "dashed") +
+  scale_colour_manual(
+    name = "Legend",
+    values = c("S-curve (Cumulative Adoption)" = "purple",
+               "Bell Curve (Adoption Rate)" = "deeppink",
+               "Innovators" = "red",
+               "Early Adopters" = "orange",
+               "Early Majority" = "goldenrod3",
+               "Late Majority" = "darkgreen",
+               "Laggards" = "blue")
+  ) +
+  labs(
+    title = "S-curve and Bell Curve",
+    x = "Time step",
+    y = "Adoption percentage"
+  ) +
+  theme_minimal(base_size = 14)
+
+```
 
 ## Conclusion
 
