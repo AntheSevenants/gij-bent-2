@@ -9,6 +9,7 @@ library(nngeo) # removing the Brussels hole
 
 source("0-common.R")
 
+coefficients <- read.csv("../output/gij_bent_coefficients_rich.csv")
 df_solo <- coefficients
 
 #
