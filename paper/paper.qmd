@@ -529,7 +529,7 @@ ggplot(df, aes(x = time)) +
                "Laggards" = "blue")
   ) +
   labs(
-    title = "S-curve and Bell Curve",
+    title = "S-curve and bell curve",
     x = "Time step",
     y = "Adoption percentage"
   ) +
