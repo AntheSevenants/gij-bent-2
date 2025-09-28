@@ -454,7 +454,7 @@ Our intercept starts from a value of `r fit %>% tidy %>% filter(term == "(Interc
 
 2. Gender
 
-We see that the distinction between users who are thought to be male and users who are thought to be female does not reach the significance threshold. Therefore, the differences which we discussed in @sec-group-variation are not different enough to the degree that they are actually distinct. Still, the fact that the *tendency* is clearly there is still interesting, and the reversal of the extreme values of course still holds.
+We see that the distinction between users who are thought to be male and users who are thought to be female does not reach the significance threshold. Therefore, the differences which we discussed in @sec-group-variation are not different enough to the degree that they are actually distinct. Still, the fact that the *tendency* is clearly there is still interesting, and the idea that individual behaviour can be the reverse of a general trend of course still holds.
 
 3. Dialect area
 
