@@ -485,6 +485,8 @@ Diffusion research has shown that the individuals driving the diffusion process 
 
 
 ```{r adopter-categories}
+#| echo: FALSE
+
 # Load libraries
 library(ggplot2)
 
@@ -513,8 +515,8 @@ cuts <- data.frame(
 
 # Plot
 ggplot(df, aes(x = time)) +
-  geom_line(aes(y = s_curve, colour = "S-curve (Cumulative Adoption)"), size = 1) +
-  geom_line(aes(y = bell_curve, colour = "Bell Curve (Adoption Rate)"), size = 1, linetype = "dashed") +
+  geom_line(aes(y = s_curve, colour = "S-curve (Cumulative Adoption)"), linewidth = 1) +
+  geom_line(aes(y = bell_curve, colour = "Bell Curve (Adoption Rate)"), linewidth = 1, linetype = "dashed") +
   geom_vline(data = cuts, aes(xintercept = x, colour = label), linetype = "dashed") +
   scale_colour_manual(
     name = "Legend",
