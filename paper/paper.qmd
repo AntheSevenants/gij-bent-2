@@ -289,19 +289,55 @@ In this section, we will go over the coefficients that were computed for each la
 
 #### Global variation pattern
 
-Of the `r num_users_filtered %>% formatn` unique tweet authors in our dataset, our elastic net regression was able to estimate `r coefficients %>% filter(coefficient != 0) %>% dim %>% .[1] %>% formatn` innovation patterns. This means that `r coefficients %>% filter(coefficient == 0) %>% dim %>% .[1] %>% formatn` authors either did not meaningfully deviate in their *gij bent* or *gij zijt* usage from what is expected from them. It could also be that the model did not have enough data to reliably estimate an innovativeness score, but since we imposed a lower limit of 10 attestations per user, this should generally not be the case.
+```{r coefficients-computation}
+#| output: false
 
-The density plot of the variation coefficients in @fig-general-density gives a global overview of the how each language user "deviates" from what is expected given their gender, location etc.. Negative coefficients on the left side of the plot show deviations of individual language users towards the conservative *gij zijt*. Positive coefficients on the right side of the plot show deviations of individual language users towards the innovative *gij bent*. The middle dotted line marks the zero coefficient, i.e. those who do not deviate from the expected norm. We see that there is a bi-modal distribution in the variation coefficients. The first distribution shows many slight corrections towards the conservative form (first bump). The second distribution shows a smaller number of larger corrections towards the innovative form (second bump). This bi-modal variation pattern would have remained invisible in a more traditional regression model.
+coefficients$removed <- ifelse(coefficients$coefficient == 0, TRUE, FALSE)
+removed_distribution <- xtabs(~ removed, data=coefficients)
+removed_distribution_prop <- removed_distribution %>% prop.table()
 
-Note that each of the two different distributions might not consist of a homogeneous type of people. For example, the innovative corrections might include people in regions where the innovative form is rarely used, and who use the innovative form nonetheless. At the same time, innovative corrections might also stem from people in an already innovative area who "out-innovate" the expectations, using the innovative form even more often than is expected. We will attempt to tease out this distinction in the next section.
+coefficients_non_zero <- coefficients[coefficients$removed == FALSE,]
+coefficients_non_zero$innovativeness <- ifelse(coefficients_non_zero$coefficient > 0, "innovative", "conservative")
+non_zero_distribution <- xtabs(~ innovativeness, data=coefficients_non_zero)
+non_zero_distribution_prop <- non_zero_distribution %>% prop.table()
 
-```{r #fig-general-density}
-#| fig-cap: A density plot describing the individual variation coefficients in our dataset. The left side of the plot (negative coefficients) shows corrections towards the conservative form, the right side of the plot (positive coefficients) shows corrections towards the innovative form.
+non_eliminated_count <- removed_distribution[["FALSE"]]
+eliminated_count <- removed_distribution[["TRUE"]]
+
+innovative_count <- non_zero_distribution[["innovative"]]
+conservative_count <- non_zero_distribution[["conservative"]]
+```
+
+Of the `r num_users_filtered %>% formatn` unique tweet authors in our dataset, our elastic net regression model was able to estimate `r non_eliminated_count %>% formatn` innovation patterns (`r removed_distribution_prop[["FALSE"]] %>% formatp` of authors). This means that `r eliminated_count %>% formatn` authors (`r removed_distribution_prop[["TRUE"]] %>% formatp` of all authors) did not meaningfully deviate in their *gij bent* or *gij zijt* usage from what is expected from them. It could also be that the model did not have enough data to reliably estimate an innovativeness score, but since we imposed a lower limit of 10 attestations per user, this should generally not be the case. Of the `r non_eliminated_count %>% formatn` innovativeness profiles, `r innovative_count %>% formatn` (`r non_zero_distribution_prop[["innovative"]] %>% formatp`) are innovative (correction towards innovative *bent*), while `r conservative_count %>% formatn` (`r non_zero_distribution_prop[["conservative"]] %>% formatp`) are conservative (correction towards conservative *zijt*). An overview is given in @fig-coefficient-plots-1 and @fig-coefficient-plots-2.
+
+```{r}
+#| label: fig-coefficient-plots
+#| column: screen-inset-shaded
+#| layout-ncol: 3 
+#| fig-subcap:
+#|   - "Proportion of removed and retained coefficients"
+#|   - "Proportion of innovative and conservative author profiles" 
+#|   - "A density plot describing the individual variation coefficients in our dataset. The left side of the plot (negative coefficients) shows corrections towards the conservative form, the right side of the plot (positive coefficients) shows corrections towards the innovative form." 
+options(scipen=999)
+
+# Retained-removed distribution
+row.names(removed_distribution) <- c("retained", "removed")
+barplot(removed_distribution %>% sort(decreasing=TRUE),
+        ylim=range(pretty(c(0, removed_distribution))))
+
+# Innovative-conservative distribution
+barplot(non_zero_distribution %>% sort(decreasing=TRUE),
+        ylim=range(pretty(c(0, non_zero_distribution))))
+
 coefficients %>%
   ggplot(aes(x = coefficient)) +
   geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.5) +
   geom_vline(xintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
+
+The density plot of the variation coefficients in @fig-coefficient-plots-3 gives a global overview of the how each language user "deviates" from what is expected given their gender, location etc.. Negative coefficients on the left side of the plot show deviations of individual language users towards the conservative *gij zijt*. Positive coefficients on the right side of the plot show deviations of individual language users towards the innovative *gij bent*. The middle dotted line marks the zero coefficient, i.e. those who do not deviate from the expected norm. We see that there is a bi-modal distribution in the variation coefficients. The first distribution shows many slight corrections towards the conservative form (first bump). The second distribution shows a smaller number of larger corrections towards the innovative form (second bump). This bi-modal variation pattern would have remained invisible in a more traditional regression model.
+
+Note that each of the two different distributions might not consist of a homogeneous type of people. For example, the innovative corrections might include people in regions where the innovative form is rarely used, and who use the innovative form nonetheless. At the same time, innovative corrections might also stem from people in an already innovative area who "out-innovate" the expectations, using the innovative form even more often than is expected. We will attempt to tease out this distinction in the next section.
 
 #### Variation patterns among groups {#sec-group-variation}
 
@@ -326,7 +362,7 @@ coefficients %>%
 
 ##### Dialect
 
-Next, we look at the dispersion of variation by Flemish dialect region in @fig-region-violin. Here, we do not see a "reversal" pattern, in contrast to @fig-gender-violin.  There seem to be two variation profiles: a Brabant variation profile, and a non-Brabant variation profile. The Brabant variation profile shows how in the Brabant dialect region, there is a slight preference for innovation at the upper end of the coefficient values, with declining coefficents towards conserative corrections. In the three non-Brabant regions, we see that there are some innovators, but they are generally few. In these dialects, the values gravitate towards more conservative corrections. With these results, we have an explanation for the bi-modal nature of @fig-general-density: the first distribution, centred *below* zero, consists mostly of language users from non-Brabant dialect areas who are even more conservative than we expect from their region, and therefore correct "downwards". The second distribution, centred *above* zero, consists mostly of eager innovators from the already innovative Brabant dialect area. As avid users of the innovative form, they correct "upwards" in our plots.
+Next, we look at the dispersion of variation by Flemish dialect region in @fig-region-violin. Here, we do not see a "reversal" pattern, in contrast to @fig-gender-violin.  There seem to be two variation profiles: a Brabant variation profile, and a non-Brabant variation profile. The Brabant variation profile shows how in the Brabant dialect region, there is a slight preference for innovation at the upper end of the coefficient values, with declining coefficents towards conserative corrections. In the three non-Brabant regions, we see that there are some innovators, but they are generally few. In these dialects, the values gravitate towards more conservative corrections. With these results, we have an explanation for the bi-modal nature of @fig-coefficient-plots-3: the first distribution, centred *below* zero, consists mostly of language users from non-Brabant dialect areas who are even more conservative than we expect from their region, and therefore correct "downwards". The second distribution, centred *above* zero, consists mostly of eager innovators from the already innovative Brabant dialect area. As avid users of the innovative form, they correct "upwards" in our plots.
 
 ```{r #fig-region-violin}
 #| fig-cap: A violin plot describing the individual variation coefficients by region. A wider figure means more data for that y value.
