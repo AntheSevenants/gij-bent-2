@@ -48,19 +48,6 @@ user_id_counts <- table(df$user_id)
 df <- subset(df, user_id %in%
               names(user_id_counts[user_id_counts >= MIN_TWEET_THRESHOLD]))
 
-num_tweets_filtered <- dim(df)[1]
-num_users_filtered <- length(unique(df %>% no_unknown_gender %>% .$user_id))
-zijt_bent_table <- df %>% xtabs(~ construction_type, .)
-per_user_ratios <- df %>%
-  group_by(user_id) %>%
-  summarize(
-    bent_count = sum(construction_type == "bent", na.rm = TRUE),
-    zijt_count = sum(construction_type == "zijt", na.rm = TRUE),
-    ratio = bent_count / (bent_count + zijt_count)
-  )
-# Mean innovativeness ratio across uers
-bent_ratio <- mean(per_user_ratios$ratio, na.rm = TRUE)
-
 
 # Only one tweet per user
 one_user_one_tweet <- function(df) {
@@ -74,3 +61,17 @@ no_unknown_gender <- function(df) {
   return(df)
 }
 
+# Constants to be used in the paper
+
+num_tweets_filtered <- dim(df)[1]
+num_users_filtered <- length(unique(df %>% no_unknown_gender %>% .$user_id))
+zijt_bent_table <- df %>% xtabs(~ construction_type, .)
+per_user_ratios <- df %>%
+  group_by(user_id) %>%
+  summarize(
+    bent_count = sum(construction_type == "bent", na.rm = TRUE),
+    zijt_count = sum(construction_type == "zijt", na.rm = TRUE),
+    ratio = bent_count / (bent_count + zijt_count)
+  )
+# Mean innovativeness ratio across uers
+bent_ratio <- mean(per_user_ratios$ratio, na.rm = TRUE)
