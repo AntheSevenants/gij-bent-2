@@ -520,12 +520,12 @@ ggplot(df, aes(x = time)) +
   geom_vline(data = cuts, aes(xintercept = x, colour = label), linetype = "dashed") +
   scale_colour_manual(
     name = "Legend",
-    values = c("S-curve (Cumulative Adoption)" = "purple",
-               "Bell Curve (Adoption Rate)" = "deeppink",
+    values = c("S-curve (cumulative adoption)" = "purple",
+               "Bell curve (adoption Rate)" = "deeppink",
                "Innovators" = "red",
-               "Early Adopters" = "orange",
-               "Early Majority" = "goldenrod3",
-               "Late Majority" = "darkgreen",
+               "Early adopters" = "orange",
+               "Early majority" = "goldenrod3",
+               "Late majority" = "darkgreen",
                "Laggards" = "blue")
   ) +
   labs(
