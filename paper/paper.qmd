@@ -460,7 +460,7 @@ We see that the distinction between users who are thought to be male and users w
 
 Next, we also see that there are significant differences between the reference dialect area (Brabant) and all other dialect areas. As was already clear from the visual inspection of the corrections per dialect area, we see that in non-Brabant areas, the corrections tend towards the conservative form, whereas Brabant area corrections are mostly innovative.
 
-In addition, we wanted to know whether there are also differences *between* the non-Brabant dialact areas. To investigate this, we ran a post-hoc analysis through emmeans [@emmeans]. In this post-hoc analysis, we check for each dialect area pair whether there are significant differences in individual variation between the two. We see in @tbl-posthoc-test that there are *no* further differences between the non-Brabant dialect areas. Our assessment of the two variation profiles was thus correct.
+In addition, we wanted to know whether there are also differences *between* the non-Brabant dialact areas. To investigate this, we ran a post-hoc analysis through `emmeans` [@emmeans]. In this post-hoc analysis, we check for each dialect area pair whether there are significant differences in individual variation between the two. We see in @tbl-posthoc-test that there are *no* further differences between the non-Brabant dialect areas. Our assessment of the two variation profiles was thus correct.
 
 ```{r tbl-posthoc-test}
 #| tbl-cap: Results of the `emmeans` posthoc analysis for dialect area. * indicates statistical significance
