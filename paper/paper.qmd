@@ -36,7 +36,7 @@ number-sections: true
 csl: chicago-author-date.csl
 df-print: kable
 abstract: |
-  TODO
+  Language change finds its origins in individual variation. Individual behaviour, however, is rarely taken into account in variationist studies. In this study, we look at innovative *gij bent* from Colloquial Belgian Dutch through a corpus of 16,968 tweets by 555 authors. With elastic net regression, we build a linguistic profile for each individual author: 51% of authors are more innovative than one would expect from their dialect area and gender, 49% are more conservative. When we plot these deviations regionally, we see a potential future horizontal diffusion pattern. Additionally, we find that influential tweet authors tend to be more innovative. Therefore, *gij bent* might currently be in the "early adopters" stage of diffusion. In general, our results show that a focus on the individual offers new perspectives which might remain hidden in traditional variationist analyses.
 execute:
   echo: false
 ---
