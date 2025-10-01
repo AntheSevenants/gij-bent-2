@@ -488,14 +488,11 @@ Diffusion research has shown that the individuals driving the diffusion process 
 
 ```{r adopter-categories}
 #| echo: FALSE
+#| fig-cap: S-curve showing the cumulative adoption or diffusion of an innovation. The bell curve is its derivative and shows the adoption rate over time. For *gij bent*, we are assumed to currently be in the "Early adopters" phase.
 
-# TODO volgorde legende is fucked
-
-# Load libraries
-library(ggplot2)
-
-# Simulated time steps
+# Rescale time to 0–100
 time <- seq(0, 20, 0.1)
+time_rescaled <- time * 5   # 0–100
 
 # Logistic S-curve (cumulative adoption)
 s_curve <- 100 / (1 + exp(-0.6 * (time - 10)))
@@ -503,42 +500,71 @@ s_curve <- 100 / (1 + exp(-0.6 * (time - 10)))
 # Bell curve (adoption rate, derivative of logistic)
 bell_curve <- dnorm(time, mean = 10, sd = 2.5) * 100
 
-# Combine into dataframe
-df <- data.frame(time, s_curve, bell_curve)
+# Combine into dataframe with rescaled x
+df <- data.frame(time = time_rescaled, s_curve, bell_curve)
 
-# Define cutoffs for adopter categories
-mean_time <- 10
-sd_time <- 2.5
-cuts <- data.frame(
-  x = c(mean_time - 2*sd_time, mean_time - sd_time, mean_time,
-        mean_time + sd_time, mean_time + 2*sd_time),
+# Build cutoff bands instead of single lines
+bands <- data.frame(
+  xmin = c(0, 
+           2.5, 
+           16, 
+           50, 
+           84),
+  xmax = c(2.5, 
+           16, 
+           50, 
+           84, 
+           100),
   label = c("Innovators", "Early adopters", "Early majority", 
             "Late majority", "Laggards"),
-  col = c("red", "orange", "green3", "darkgreen", "blue")
+  fill = c("red", "orange", "yellow", "darkgreen", "blue")
 )
 
-# Plot
+# Ensure correct order
+bands$label <- factor(
+  bands$label,
+  levels = c("Innovators", "Early adopters", "Early majority", "Late majority", "Laggards")
+)
+
+# Plot with bands
 ggplot(df, aes(x = time)) +
+  # bands (slightly transparent so curves still visible)
+  geom_rect(data = bands, aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf, fill = label),
+            alpha = 0.1, inherit.aes = FALSE) +
+  
   geom_line(aes(y = s_curve, colour = "S-curve (cumulative adoption)"), linewidth = 1) +
-  geom_line(aes(y = bell_curve, colour = "Bell Curve (adoption rate)"), linewidth = 1, linetype = "dashed") +
-  geom_vline(data = cuts, aes(xintercept = x, colour = label), linetype = "dashed") +
-  scale_colour_manual(
-    name = "Legend",
-    values = c("S-curve (cumulative adoption)" = "purple",
-               "Bell curve (adoption Rate)" = "deeppink",
-               "Innovators" = "red",
+  geom_line(aes(y = bell_curve, colour = "Bell curve (adoption rate)"), linewidth = 1, linetype = "dashed") +
+  # label
+  annotate("text", x = 9.25, y = 52, label = "Now",
+           colour = "#7f6c4c", hjust = 0.5) +
+  scale_fill_manual(
+    name = "Adopter categories",
+    values = c("Innovators" = "red",
                "Early adopters" = "orange",
-               "Early majority" = "goldenrod3",
+               "Early majority" = "yellow",
                "Late majority" = "darkgreen",
                "Laggards" = "blue")
   ) +
+  scale_colour_manual(
+  name = "",
+  values = c("S-curve (cumulative adoption)" = "purple",
+             "Bell curve (adoption rate)" = "deeppink"),
+  limits = c("S-curve (cumulative adoption)",
+             "Bell curve (adoption rate)")) +  # enforce order
   labs(
-    title = "S-curve and bell curve",
-    x = "Time step",
-    y = "Adoption percentage"
+    x = "Time",
+    y = "Adoption"
   ) +
-  theme_minimal(base_size = 14)
-
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "bottom",
+    legend.box = "vertical"
+  ) +
+  guides(
+    colour = guide_legend(nrow = 1),  # lines legend
+    fill   = guide_legend(nrow = 2)   # bands legend
+  )
 ```
 
 ## Discussion
