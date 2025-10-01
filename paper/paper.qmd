@@ -412,7 +412,7 @@ Our influence metric is based on the priming ratio from @sevenants_investigating
 
 ```{r #fig-influence}
 #| label: fig-influence-boxplot
-#| caption: The distribution of the influence metric in our dataset. The bulk of our tweet authors are followed more than they follow others themselves.
+#| fig-cap: The distribution of the influence metric in our dataset. The bulk of our tweet authors are followed more than they follow others themselves.
 
 boxplot(coefficients$influence, horizontal = T)
 ```
