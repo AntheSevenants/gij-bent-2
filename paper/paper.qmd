@@ -506,14 +506,14 @@ df <- data.frame(time = time_rescaled, s_curve, bell_curve)
 # Build cutoff bands instead of single lines
 bands <- data.frame(
   xmin = c(0, 
-           2.5, 
-           16, 
+           14, 
+           32, 
            50, 
-           84),
-  xmax = c(2.5, 
-           16, 
+           68),
+  xmax = c(14, 
+           32, 
            50, 
-           84, 
+           68, 
            100),
   label = c("Innovators", "Early adopters", "Early majority", 
             "Late majority", "Laggards"),
@@ -535,7 +535,7 @@ ggplot(df, aes(x = time)) +
   geom_line(aes(y = s_curve, colour = "S-curve (cumulative adoption)"), linewidth = 1) +
   geom_line(aes(y = bell_curve, colour = "Bell curve (adoption rate)"), linewidth = 1, linetype = "dashed") +
   # label
-  annotate("text", x = 9.25, y = 52, label = "Now",
+  annotate("text", x = 22.75, y = 52, label = "Now",
            colour = "#7f6c4c", hjust = 0.5) +
   scale_fill_manual(
     name = "Adopter categories",
