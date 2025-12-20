@@ -79,6 +79,18 @@ formatp <- function(number) {
     label_percent()(number)
 }
 
+fancy_scientific <- function(l) {
+    # turn in to character string in scientific notation
+    l <- scientific(l, digits=4)
+    # quote the part before the exponent to keep all the digits
+    exponent <- gsub(".*e(.*)$", "\\1", l) %>% as.numeric()
+    prefix <- gsub("(.*)e.*$", "\\1", l)
+    # turn the 'e+' into plotmath format
+    l <- paste0(prefix, "\\times 10^{", exponent, "}")
+    
+    return(l)
+}
+
 suppress_gloss <- FALSE
 ```
 
@@ -231,11 +243,11 @@ As this study is a follow-up on the *gij bent* study by @sevenants_zijt_2024, we
 
 To estimate the individual variation among our tweet authors, we would ideally have a quantitative measure which indicates the deviation of each user from the expected linguistic behaviour. Authors who do not deviate would be assigned a (near-)zero value, while those who *do* deviate would receive either a positive or negative value, depending on whether they exceed the expectations for their profiles, or go against it. In this way, our measure of individual variation truly expresses the peculiarities of each individual speaker.
 
-In order to operationalise this computation of individual variation, we made use of elastic net regression [@friedman_regularization_2010]. Elastic net regression is an extension of more "traditional" regression techniques [discussed in @gries_most_2015]. Its main innovation is that it uses an extra "penalty" term, which prevents model coefficients, the values associated with model predictors, from growing too large. One could think of this as making the model *worse*, but on purpose. In practice, this model penalty is applied for two reasons. First, it attempts to prevent overfitting. Too few data points can skew the estimation of a coefficient, so the penalty is a means to attenuate predictions in such cases. Second, the model penalty can function as a way to do variable selection. With elastic net, a coefficient can be "punished" to the extent that it nears or equals to zero. With this, the predictor of that coefficient is disabled outright. We can use this behaviour to enter many predictors in the same analysis at once, and let the model decide which ones are actually interesting. In our case, we can estimate a correction term for each speaker separately, and have the elastic net regression model figure out which speakers deviate from expectations and which do not. The latter speakers will then be eliminated from the model.
+In order to operationalise this computation of individual variation, we made use of elastic net regression [@friedman_regularization_2010]. Elastic net regression is an extension of more "traditional" regression techniques [discussed in @gries_most_2015]. Its main innovation is that it uses an extra "penalty" term $\lambda$ ("lambda"), which prevents model coefficients, the values associated with model predictors, from growing too large. One could think of this as making the model *worse*, but on purpose. In practice, this model penalty is applied for two reasons. First, it attempts to prevent overfitting. Too few data points can skew the estimation of a coefficient, so the penalty is a means to attenuate predictions in such cases. Second, the model penalty can function as a way to do variable selection. With elastic net, a coefficient can be "punished" to the extent that it nears or equals to zero. With this, the predictor of that coefficient is disabled outright. We can use this behaviour to enter many predictors in the same analysis at once, and let the model decide which ones are actually interesting. In our case, we can estimate a correction term for each speaker separately, and have the elastic net regression model figure out which speakers deviate from expectations and which do not. The latter speakers will then be eliminated from the model.
 
 In addition, elastic net leverages "k-fold cross validation". This technique divides the data into several parts and iteratively uses different parts for training and testing the regression model. This practice also contributes towards general robustness and the prevention of overfitting. K-fold cross validation allows us to have hundreds of predictors in a single analysis, which is a useful property when we want to track a multitude of language users at the same time. Such a thing would be impossible with a regular regression analysis on the basis of mathematical intractability (i.e. with mixed models). 
 
-Finally, note that regularised regression can be realised in two different ways: through ridge regression, or through lasso regression. In ridge regression, regularisation only brings coefficients asymptotically close to zero, whereas in lasso regression, coefficients can be zeroed out entirely. Elastic net offers a combination of both through a parameter called "alpha". A zero value for alpha means only ridge regression is used, the opposite leads to only lasso regression. A combination of both techniques can be beneficial depending on the dataset. For additional details on elastic net regression for linguistics, see @sevenants_investigating_2024.
+Finally, note that regularised regression can be realised in two different ways: through ridge regression, or through lasso regression. In ridge regression, regularisation only brings coefficients asymptotically close to zero, whereas in lasso regression, coefficients can be zeroed out entirely. Elastic net offers a combination of both through a parameter called $\alpha$ ("alpha"). A zero value for alpha means only ridge regression is used, the opposite leads to only lasso regression. A combination of both techniques can be beneficial depending on the dataset. For additional details on elastic net regression for linguistics, see @sevenants_investigating_2024.
 
 In general, elastic net regression lends itself well to research into individual variation. With elastic net, we modelled the presence of either *zijt* (conservative) or *bent* (innovative) as a logistic response variable. In our model, we estimated coefficients for each language user separately by treating those language users as individual predictors. Because we also included all the predictors from @sevenants_zijt_2024 in our analysis, these more general predictors (gender, dialect region, distance from northern Antwerp, formality) form the "expectation" for each specific speaker. Due to the multifactorial control characteristic[^multifactoriality] of regression analysis, this makes it so each individual speaker's coefficient becomes a measure of the variation that is not explained on the basis of the more general predictor terms, i.e. the individual deviation or variation we expressed our desire for in the previous sections.
 
@@ -253,7 +265,18 @@ For an overview of all predictors included in our model, see @tbl-predictors.
 
 : An overview of all predictors which will be used in the elastic net regression. Predictors marked with \* receive separate predictors for each level (for example, separate predictors for each tweet author).  {#tbl-predictors}
 
-For our analysis, we used ElasticToolsR [@sevenants_elastic_2024], a package for the R language [@r_language_2021] which simplifies running elastic net regression models. This package also automatically determines the best split between ridge and lasso regression.
+```{r meta-info-load}
+source("../analysis/ElasticToolsR/MetaFile.R")
+
+model_meta <- meta.file(read.csv("../output/model_meta.csv"))
+
+alpha <- subset(model_meta$as.data.frame(), predicate == "alpha")[["object"]]
+lambda <- subset(model_meta$as.data.frame(), predicate == "lambda")[["object"]]
+intercept <- subset(model_meta$as.data.frame(), predicate == "intercept")[["object"]]
+```
+
+For our analysis, we used ElasticToolsR [@sevenants_elastic_2024], a package for the R language [@r_language_2021] which simplifies running elastic net regression models. This package also automatically determines the best split between ridge and lasso regression. Our model for performs the best at $\alpha = `r alpha %>% formatd(1)`$ and $\lambda = `r lambda %>% fancy_scientific()`$.
+
 
 ## Results
 
@@ -267,7 +290,7 @@ In this section, we will go over the results produced by our elastic net regress
 - at distance "0" from northern Antwerp
 - for users assumed to be male
 
-In general, the control variable results are comparable to the results from @sevenants_zijt_2024. The innovative *gij bent* is more popular in the Brabant dialect area (positive correction), and less popular in the other areas (negative corrections). We even see the same anomaly for the West-Flemish dialect area.[^anomaly] *gij bent* becomes less popular as we move away from northern Antwerp, and more informal tweets also correct towards the conservative *gij zijt* (albeit only very slightly). We still see the expected gender effect, where tweets assumed to come from women have a higher probability of the use of *gij bent*. Compared to @sevenants_zijt_2024, some predictors have more subtle effects. Especially the distance correction and the formality distinction correction are smaller. We assume these differences stem from (i) the coefficient attenuation from the elastic net penalty (ii) a difference in dataset size -- @sevenants_zijt_2024 used only one tweet per user because of issues with random effects, which we sidestep by using elastic net regression (iii) parts of the variation attributed to other predictors in @sevenants_zijt_2024 will now be attributed to individual variation. Still, broadly speaking, the results remain comparable. Therefore, we can safely move on to the discussion of the individual variation.
+In general, the control variable results are comparable to the results from @sevenants_zijt_2024. Our intercept has a logit value of `r intercept %>% formatd()`, which means that the baseline situation is conservative *gij zijt*. The innovative *gij bent* is more popular in the Brabant dialect area (positive correction), and less popular in the other areas (negative corrections). We even see the same anomaly for the West-Flemish dialect area.[^anomaly] *gij bent* becomes less popular as we move away from northern Antwerp, and more informal tweets also correct towards the conservative *gij zijt* (albeit only very slightly). We still see the expected gender effect, where tweets assumed to come from women have a higher probability of the use of *gij bent*. Compared to @sevenants_zijt_2024, some predictors have more subtle effects. Especially the distance correction and the formality distinction correction are smaller. We assume these differences stem from (i) the coefficient attenuation from the elastic net penalty (ii) a difference in dataset size -- @sevenants_zijt_2024 used only one tweet per user because of issues with random effects, which we sidestep by using elastic net regression (iii) parts of the variation attributed to other predictors in @sevenants_zijt_2024 will now be attributed to individual variation. Still, broadly speaking, the results remain comparable. Therefore, we can safely move on to the discussion of the individual variation.
 
 [^anomaly]: The results for the West-Flemish dialect area need to be interpreted in conjunction with the "distance from northern Antwerp" parameter. The regression analysis assumes a zero distance from Antwerp from the intercept, but this does not make sense for dialect areas other than Brabant. Therefore, if we apply the extra corrections expressed in "distance from northern Antwerp", we get the expected negative correction towards the conservative form (`r (121 * coefficients_full %>% filter(feature == "_distance_from_antwerp") %>% .$coefficient) %>% formatd(3)`). Still, the *gij* pronoun is quite rare in this area, so the West-Flemish results should be treated with caution.
 
