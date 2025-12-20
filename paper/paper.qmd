@@ -374,7 +374,9 @@ barplot(non_zero_distribution %>% sort(decreasing=TRUE),
 coefficients %>%
   ggplot(aes(x = coefficient)) +
   geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.5) +
-  geom_vline(xintercept=0, color="black", linewidth=1, linetype="dotdash")
+  geom_vline(xintercept=0, color="black", linewidth=1, linetype="dotdash") +
+  xlab("Coefficient")
+  ylab("Density") +
 ```
 
 The density plot of the variation coefficients in @fig-coefficient-plots-3 gives a global overview of the how each language user "deviates" from what is expected given their gender, location etc.. Negative coefficients on the left side of the plot show deviations of individual language users towards the conservative *gij zijt*. Positive coefficients on the right side of the plot show deviations of individual language users towards the innovative *gij bent*. The middle dotted line marks the zero coefficient, i.e. those who do not deviate from the expected norm. We see that there is a bi-modal distribution in the variation coefficients. The first distribution shows many slight corrections towards the conservative form (first bump). The second distribution shows a smaller number of larger corrections towards the innovative form (second bump). This bi-modal variation pattern would have remained invisible in a more traditional regression model.
@@ -397,7 +399,8 @@ coefficients$gender_friendly <- factor(coefficients$gender_friendly, levels=c("m
 coefficients %>%
   ggplot(aes(x = gender_friendly, y = coefficient, fill = gender_friendly)) +
   geom_violin() +
-  xlab("gender") +
+  xlab("Gender") +
+  ylab("Coefficient") +
   guides(fill=guide_legend(title="gender")) +
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
@@ -414,8 +417,9 @@ coefficients$dialect_friendly <- gsub("(_is_dialect_)", "", coefficients$dialect
 coefficients %>%
   ggplot(aes(x = dialect_friendly, y = coefficient, fill = dialect_friendly)) +
   geom_violin() +
-  xlab("dialect area") +
-  guides(fill=guide_legend(title="dialect area")) +
+  xlab("Dialect area") +
+  ylab("Coefficient") +
+  guides(fill=guide_legend(title="Dialect area")) +
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
 
