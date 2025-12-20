@@ -295,7 +295,6 @@ In general, the control variable results are comparable to the results from @sev
 [^anomaly]: The results for the West-Flemish dialect area need to be interpreted in conjunction with the "distance from northern Antwerp" parameter. The regression analysis assumes a zero distance from Antwerp from the intercept, but this does not make sense for dialect areas other than Brabant. Therefore, if we apply the extra corrections expressed in "distance from northern Antwerp", we get the expected negative correction towards the conservative form (`r (121 * coefficients_full %>% filter(feature == "_distance_from_antwerp") %>% .$coefficient) %>% formatd(3)`). Still, the *gij* pronoun is quite rare in this area, so the West-Flemish results should be treated with caution.
 
 ```{r #tbl-other-coefficients}
-#| label: tbl-other-coefficients
 #| tbl-cap: "Overview of the controlling predictors predictors, their values and whether they were retained by the elastic net regression" 
 # All other coefficients start with an underscore
 other_coefficients <- coefficients_full[coefficients_full$feature %>% substr(1,1) == "_",]
@@ -375,8 +374,8 @@ coefficients %>%
   ggplot(aes(x = coefficient)) +
   geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.5) +
   geom_vline(xintercept=0, color="black", linewidth=1, linetype="dotdash") +
-  xlab("Coefficient")
-  ylab("Density") +
+  xlab("Coefficient") +
+  ylab("Density")
 ```
 
 The density plot of the variation coefficients in @fig-coefficient-plots-3 gives a global overview of the how each language user "deviates" from what is expected given their gender, location etc.. Negative coefficients on the left side of the plot show deviations of individual language users towards the conservative *gij zijt*. Positive coefficients on the right side of the plot show deviations of individual language users towards the innovative *gij bent*. The middle dotted line marks the zero coefficient, i.e. those who do not deviate from the expected norm. We see that there is a bi-modal distribution in the variation coefficients. The first distribution shows many slight corrections towards the conservative form (first bump). The second distribution shows a smaller number of larger corrections towards the innovative form (second bump). This bi-modal variation pattern would have remained invisible in a more traditional regression model.
@@ -430,13 +429,17 @@ $$
 $$
 
 
-We will immediately shift towards the visual interpretation of the GAM in TODO. Dark blue colours show corrections towards the conservative variant, whereas light yellow colours show corrections towards the innovative variant. Beware to keep in mind, however, that these corrections are to be interpreted against the expected behaviour in that specific dialect region. In the GAM plot, we see that the northern Antwerp region is specifically innovative in contrast to an already innovative dialect region, Brabant. This is expected from the results by @sevenants_zijt_2024. What is especially interesting given our interest in the innovators in the non-Brabant regions, is that we indeed see that areas closer to the Brabant border show corrections that tend more towards the innovative variant. In addition, we also see that there seems to be an additional horizontal diffusion pattern, where the more innovative variant seems to spread from east to west in the east and from west to east in the west. This pattern remained invisible in the original study. Computer simulations have shown that border-adjacent speakers can play an important role as gatekeepers of innovations, since their hybrid identity can form a "bridge" through which innovations can be passed on [@sevenants_neighbours_2021]. In a sense, the horizontal positive variation coefficient pattern shows the pathway that *gij bent* might take in the future in order to break through in these other dialect regions.
+We will immediately shift towards the visual interpretation of the GAM in @fig-gam. Dark blue colours show corrections towards the conservative variant, whereas light yellow colours show corrections towards the innovative variant. Beware to keep in mind, however, that these corrections are to be interpreted against the expected behaviour in that specific dialect region. In the GAM plot, we see that the northern Antwerp region is specifically innovative in contrast to an already innovative dialect region, Brabant. This is expected from the results by @sevenants_zijt_2024. What is especially interesting given our interest in the innovators in the non-Brabant regions, is that we indeed see that areas closer to the Brabant border show corrections that tend more towards the innovative variant. In addition, we also see that there seems to be an additional horizontal diffusion pattern, where the more innovative variant seems to spread from east to west in the east and from west to east in the west. This pattern remained invisible in the original study. Computer simulations have shown that border-adjacent speakers can play an important role as gatekeepers of innovations, since their hybrid identity can form a "bridge" through which innovations can be passed on [@sevenants_neighbours_2021]. In a sense, the horizontal positive variation coefficient pattern shows the pathway that *gij bent* might take in the future in order to break through in these other dialect regions.
 
-TODO figure
+```{r #fig-gam}
+#| echo: false
+#| fig-cap: A plot showing the individual variation correction per municipality. Darker colours signify negative corrections (more conservative), lighter colours signify positive corrections (more innovative).
+setwd("../analysis/")
+source("2-analysis-gam.R")
+df_to_plot(df_solo)
+```
 
 In general, then, we see that there are two trends in the variation coefficients. Firstly, for gender, we see a "reversal" pattern, where typical behaviour is not shared across the entire gender group. Secondly, we see a wave-like [@francois_trees_2014] horizontal diffusion pattern in the non-Brabant dialect regions, even in regions which, in the general analysis, are thought to be rather conservative. Though speakers are of course free to use whatever forms they want, how they deviate from expectations is not random. 
-
-[violin plots]
 
 #### Network effects {#sec-regression}
 
@@ -456,8 +459,7 @@ $$
 
 Our influence metric is based on the priming ratio from @sevenants_investigating_2024 and hinges on logarithm and Laplace smoothing [@brysbaert_dealing_2013]. The logarithm is a key operation in order to compress the wide numeric range found in follower and following counts. Where some users have thousands of followers, some only have a few. The use of the logarithm scales this discrepancy down. In addition, we use Laplace smoothing in order to avoid division by zero, in the event that users do not follow other users. The mean influence value among our speakers is `r coefficients$influence %>% mean() %>% formatd()` (median `r coefficients$influence %>% median() %>% formatd()`). The boxplot in @fig-influence-boxplot shows that our dataset generally consists of more influential figures, i.e. users who have more followers than they themselves follow people. This is expected, since broadly speaking, 90% of social media users only read, but never post themselves [@nielsen_participation_2006; related to the Pareto Principle: @juran_non_1975]. Since our dataset consists of posts, it makes sense that our dataset mainly engages with the other 10%, the active users.
 
-```{r #fig-influence}
-#| label: fig-influence-boxplot
+```{r #fig-influence-boxplot}
 #| fig-cap: The distribution of the influence metric in our dataset. The bulk of our tweet authors are followed more than they follow others themselves.
 
 boxplot(coefficients$influence, horizontal = T)
