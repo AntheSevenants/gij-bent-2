@@ -91,6 +91,12 @@ fancy_scientific <- function(l) {
     return(l)
 }
 
+# https://stackoverflow.com/a/18509816
+firstup <- function(x) {
+  substr(x, 1, 1) <- toupper(substr(x, 1, 1))
+  x
+}
+
 suppress_gloss <- FALSE
 ```
 
@@ -393,14 +399,16 @@ Secondly, we see that the most extreme innovative corrections in the plot stem f
 ```{r #fig-gender-violin}
 #| fig-cap: A violin plot describing the individual variation coefficients for men and women. A wider figure means more data for that y value.
 coefficients$gender_friendly <- gsub("(_is_gender_)", "", coefficients$gender)
-coefficients$gender_friendly <- factor(coefficients$gender_friendly, levels=c("male", "female"))
+coefficients$gender_friendly <- firstup(coefficients$gender_friendly)
+coefficients$gender_friendly <- factor(coefficients$gender_friendly, levels=c("Male", "Female"))
 
 coefficients %>%
   ggplot(aes(x = gender_friendly, y = coefficient, fill = gender_friendly)) +
   geom_violin() +
   xlab("Gender") +
   ylab("Coefficient") +
-  guides(fill=guide_legend(title="gender")) +
+  guides(fill="none") +
+  # guides(fill=guide_legend(title="gender")) +
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
 
