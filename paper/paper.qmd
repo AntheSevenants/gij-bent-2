@@ -23,6 +23,23 @@ format:
       - right=20mm
       - bottom=20mm
       - heightrounded
+  latex:
+    theme: default
+    standalone: true
+    cite-method: biblatex
+    filters: []
+    documentclass: article
+    toc: false
+    reference-location: document
+    wrap: none
+    hyperrefoptions:
+      - hidelinks=true
+      - colorlinks=false
+    no-highlight: true
+    variables:
+      tight-list: false
+    tbl-cap-location: top
+    template: template.tex
 editor: source
 title-block-banner: true
 bibliography: references.bib
