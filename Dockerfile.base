@@ -1,13 +1,13 @@
 # I don't really care about storage, I care about reusability
 # So, the base image will be the rocker/rstudio image
 # This already contains R and R studio, which is mostly what we'll need
-FROM rocker/rstudio:4
+FROM rocker/rstudio:4.4.1
 
 # First, I copy all dependencies into the container
 COPY analysis/renv.lock /home/rstudio/analysis/renv.lock
 
 # Install some linux libraries that R packages need
-RUN apt-get update && apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libodbc2 libxt6 libudunits2-dev libgdal-dev libgeos-dev libproj-dev lsof
+RUN apt-get update && apt-get install -y libcurl4-openssl-dev libssl-dev libgflags-dev libgoogle-glog-dev libgtest-dev libxml2-dev libodbc2 libxt6 libudunits2-dev libgdal-dev libgeos-dev libproj-dev lsof cmake libabsl-dev
 
 WORKDIR /home/rstudio/analysis
 
