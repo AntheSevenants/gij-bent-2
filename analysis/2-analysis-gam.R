@@ -6,11 +6,11 @@ library(cowplot) # plot_grid
 library(dplyr) # group_by
 library(scales) # percent
 library(nngeo) # removing the Brussels hole
+library(ggplot2)
 
 source("0-common.R")
 
-coefficients <- read.csv("../output/gij_bent_coefficients_rich.csv")
-df_solo <- coefficients
+df_solo <- read.csv("../output/gij_bent_coefficients_rich.csv")
 
 #
 # GAM
@@ -74,15 +74,15 @@ gemeenten <- merge(x = gemeenten, y = df_zip, by="key", all.x=TRUE)
 # == Provinces ==
 provinces <- st_read("maps/gemeenten/Refprv.shp")
 provinces <- st_transform(provinces, 4326)
-plot(provinces$geometry)
+# plot(provinces$geometry)
 provinces <- subset(provinces, select = keep_columns)
 
 brabant <- provinces[provinces$NAAM == "Vlaams Brabant",]
-plot(brabant$geometry)
+# plot(brabant$geometry)
 antwerpen <- provinces[provinces$NAAM == "Antwerpen",]
-plot(antwerpen$geometry)
+# plot(antwerpen$geometry)
 groot_brabant <- st_union(brabant, antwerpen)
-plot(groot_brabant$geometry)
+# plot(groot_brabant$geometry)
 groot_brabant <- st_remove_holes(groot_brabant)
 groot_brabant <- subset(groot_brabant,
                         select = keep_columns)
@@ -161,15 +161,15 @@ plot_map <- function(df_pred, gemeenten) {
       linewidth = 0.5,
       fill = "transparent"
     ) +
-    geom_sf_text(
-      data = gemeenten$geometry,
-      check_overlap=T,
-      size=2,
-      aes(label = gemeenten$zip,
-          color = gemeenten$coefficient > 0)) +
+    # geom_sf_text(
+    #   data = gemeenten$geometry,
+    #   check_overlap=T,
+    #   size=2,
+    #   aes(label = gemeenten$zip,
+    #       color = gemeenten$coefficient > 0)) +
     #geom_jitter(data = df, width=0.02, height=0.02, aes(x=long, y=lat, color=df$construction_type)) +
     coord_sf(default_crs = sf::st_crs(4326)) +
-    guides(fill=guide_legend(title="Kans op 'gij bent'")) +
+    guides(fill=guide_legend(title="Indiviudual variation (correction) per municipality")) +
     theme(legend.position = "bottom", legend.margin=margin(c(0,0,0,45)))
 }
 
@@ -217,5 +217,5 @@ df_to_plot <- function(df, too.far=NA) {
   plot_map(df_pred, gemeenten_)
 }
 
-fit <- build_gam(df_solo)
-df_to_plot(df_solo)
+# fit <- build_gam(df_solo)
+# df_to_plot(df_solo)
