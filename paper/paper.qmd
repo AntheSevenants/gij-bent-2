@@ -232,7 +232,7 @@ For an overview of all predictors included in our model, see @tbl-predictors.
 |gender|the estimated gender of the tweet poster -- generated automatically|
 |distance from northern Antwerp|the distance of the poster's location in km from the northern Antwerp area|
 |formality|the formality of the tweet -- derived from whether the tweet author interacts with another user in the tweet|
-|user_id\*|a unique (anonymised) identifier for the tweet author -- allows us to know which tweets belong to the same person|
+|user id\*|a unique (anonymised) identifier for the tweet author -- allows us to know which tweets belong to the same person|
 
 : An overview of all predictors which will be used in the elastic net regression. Predictors marked with \* receive separate predictors for each level (for example, separate predictors for each tweet author).  {#tbl-predictors}
 
