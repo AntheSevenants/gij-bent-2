@@ -471,7 +471,7 @@ To answer this question, we built a linear regression model. We model the coeffi
 
 : An overview of all predictors used in the linear regression model. {#tbl-linear-predictors}
 
-```{r #tbl-linear-predictors}
+```{r #tbl-linear-regression-results}
 #| tbl-cap: "Results of the linear regression analysis. * indicates statistical significance"
 fit <- lm(coefficient ~ gender + dialect + influence, data=coefficients %>% no_unknown_gender())
 coefficients_lm_df <- fit %>% format_table()
