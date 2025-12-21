@@ -516,7 +516,7 @@ First, we look at the intercept of the model. Just like in @sec-controlling-pred
 - ... who is assumed to be male
 - ... with an influence of "zero"
 
-Our intercept starts from a value of `r fit %>% tidy %>% filter(term == "(Intercept)") %>% .$estimate %>% formatd(3)`, which shows a slight bias for innovative behaviour. All further corrections need to be understood relative to this value.
+Our intercept starts from a value of `r fit %>% tidy %>% filter(term == "(Intercept)") %>% .$estimate %>% formatd(3)`, which shows a slight bias for innovative correction. All further corrections need to be understood relative to this value.
 
 ##### Gender
 
