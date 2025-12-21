@@ -170,7 +170,10 @@ plot_map <- function(df_pred, gemeenten) {
     #geom_jitter(data = df, width=0.02, height=0.02, aes(x=long, y=lat, color=df$construction_type)) +
     coord_sf(default_crs = sf::st_crs(4326)) +
     guides(fill=guide_legend(title="Indiviudual variation (correction) per municipality")) +
-    theme(legend.position = "bottom", legend.margin=margin(c(0,0,0,45)))
+    theme(legend.position = "bottom",
+          legend.box           = "vertical",
+          legend.direction     = "horizontal"
+    )
 }
 
 nearest_point <- function(df_pred, lat, long, column) {
