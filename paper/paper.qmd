@@ -426,7 +426,8 @@ coefficients %>%
   geom_violin() +
   xlab("Dialect area") +
   ylab("Coefficient") +
-  guides(fill=guide_legend(title="Dialect area")) +
+  # guides(fill=guide_legend(title="Dialect area")) +
+  guides(fill="none") +
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
 
@@ -448,6 +449,8 @@ source("2-analysis-gam.R")
 
 ```{r #fig-gam}
 #| echo: false
+#| fig-width: 7
+#| fig-height: 5
 #| fig-cap: A map showing the individual variation correction per municipality. Darker colours signify negative corrections (more conservative), lighter colours signify positive corrections (more innovative).
 df_to_plot(df_solo)
 ```
@@ -547,6 +550,8 @@ Diffusion research has shown that the individuals driving the diffusion process 
 
 ```{r fig-adopter-categories}
 #| echo: FALSE
+#| fig-width: 7
+#| fig-height: 7
 #| fig-cap: S-curve showing the cumulative adoption or diffusion of an innovation. The bell curve is its derivative and shows the adoption rate over time. For *gij bent*, we are assumed to currently be in the "Early adopters" phase.
 
 # Rescale time to 0–100
