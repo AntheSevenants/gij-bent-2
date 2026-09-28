@@ -516,7 +516,7 @@ Our intercept starts from a value of `r fit %>% tidy %>% filter(term == "(Interc
 
 2. Gender
 
-We see that the distinction between users who are thought to be male and users who are thought to be female does not reach the significance threshold. Therefore, the differences which we discussed in @sec-group-variation are not different enough to the degree that they are actually distinct. Still, the fact that the *tendency* is clearly there is still interesting, and the idea that individual behaviour can be the reverse of a general trend of course still holds.
+We see that the distinction between users who are thought to be male and users who are thought to be female does not reach the significance threshold. Therefore, the differences which we discussed in @sec-group-variation are not sufficiently large to constitute distinct patterns. The results in Figure 2 and Table 4 are based on the same elastic-net coefficients: Figure 2 visualizes the individual corrections to the general pattern, while Table 4 tests whether these corrections differ systematically between groups. The negative coefficient for female authors in Table 4 should therefore be interpreted as a tendency for female authors to make more conservative corrections to the general pattern, rather than as evidence that women are generally more conservative than men in their use of *gij bent*. This is consistent with the pattern shown in Figure 2, although the difference is not statistically significant. The results thus provide evidence for a tendency towards individual behaviour that can run counter to the general trend, without indicating a distinct gender-specific pattern.
 
 3. Dialect area
 
