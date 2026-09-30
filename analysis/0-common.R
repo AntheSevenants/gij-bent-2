@@ -2,6 +2,7 @@ library(stringr)
 library(emmeans)
 library(broom)
 library(tidycat)
+library(dplyr)
 
 df <- read.delim("../data/tweets_geo_full.tsv")
 
@@ -42,6 +43,11 @@ df$username <- as.factor(df$username)
 df <- df[, -which(names(df) %in% c("lat", "long"))]
 colnames(df)[colnames(df) == "norm_lat"] <- "lat"
 colnames(df)[colnames(df) == "norm_long"] <- "long"
+
+# Follower/following log
+df$log_followers = log(df$user_followers_count)
+df$log_following = log(df$user_friends_count)
+df$log_tweet_count = log(df$user_tweet_count)
 
 # Build a frequency table so we know the user_id counts
 user_id_counts <- table(df$user_id)
