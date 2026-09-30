@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   rstudio:
     image: "anthesevenants/gij-bent-2:rstudio"

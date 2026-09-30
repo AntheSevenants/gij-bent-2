@@ -1,19 +1,29 @@
 FROM anthesevenants/gij-bent-2:base
 # We start from the R Studio base
 
-RUN apt-get install -y lsof
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    pkg-config \
+    libuv1-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
+    lsof \
+    pandoc
 
-RUN R -q -e "install.packages('rmarkdown', repos = c(CRAN = 'https://cloud.r-project.org'))"
-RUN R -q -e "install.packages('knitr', repos = c(CRAN = 'https://cloud.r-project.org'))"
+USER rstudio
+RUN R -q -e "install.packages(c('rmarkdown', 'knitr', 'tinytex'), \
+               lib = '/usr/local/lib/R/site-library', \
+               repos = 'https://cloud.r-project.org')" \
+    && R -q -e "tinytex::install_tinytex()"
 
-# Let's set the working directory correctly (also for the R environment itself)
-RUN echo "setwd(\"/home/rstudio/gij-bent-2/analysis/\")" > ~/../home/rstudio/.Rprofile
-RUN mkdir -p "/home/rstudio/.local/share/rstudio/projects_settings/"
-RUN mkdir -p "/root/.local/share/rstudio/projects_settings/"
-RUN chmod -R 777 "/home/rstudio/.local/"
-RUN chmod -R 777 "/root/.local/"
-RUN echo "/home/rstudio/gij-bent-2/analysis/gij-bent-2.Rproj" > "/home/rstudio/.local/share/rstudio/projects_settings/last-project-path"
-RUN echo "/home/rstudio/gij-bent-2/analysis/gij-bent-2.Rproj" > "/root/.local/share/rstudio/projects_settings/last-project-path"
+RUN R -q -e "library(rmarkdown)"
 
-RUN R -q -e "install.packages('tinytex', repos = c(CRAN = 'https://cloud.r-project.org'))"
-RUN R -q -e "tinytex::install_tinytex()"
+USER root
+RUN mkdir -p /home/rstudio/gij-bent-2/analysis/ \
+    && mkdir -p /home/rstudio/.local/share/rstudio/projects_settings/ \
+    && mkdir -p /root/.local/share/rstudio/projects_settings/
+
+RUN echo "setwd('/home/rstudio/gij-bent-2/analysis/')" > /home/rstudio/.Rprofile \
+    && echo "/home/rstudio/gij-bent-2/analysis/gij-bent-2.Rproj" > /home/rstudio/.local/share/rstudio/projects_settings/last-project-path \
+    && echo "/home/rstudio/gij-bent-2/analysis/gij-bent-2.Rproj" > /root/.local/share/rstudio/projects_settings/last-project-path
