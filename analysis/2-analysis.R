@@ -9,15 +9,13 @@ source("0-common.R")
 #
 
 coeff <- read.csv("../output/gij_bent_coefficients_two_genders.csv")
+coeff$feature <- as.character(coeff$feature)
 
 coeff <- merge(x = coeff %>% subset(substr(feature, 1, 1) != "_"),
                y = df %>% one_user_one_tweet,
                by.x = "feature",
                by.y = "user_id",
                all.x = TRUE)
-coeff$log_followers = log(coeff$user_followers_count)
-coeff$log_following = log(coeff$user_friends_count)
-coeff$log_tweet_count = log(coeff$user_tweet_count)
 coeff$influence = log((coeff$user_followers_count + 0.001) / (coeff$user_friends_count + 0.001))
 
 coeff %>%
@@ -49,6 +47,22 @@ coeff %>%
   geom_boxplot() +
   coord_flip()
 
+coeff %>%
+  ggplot(aes(x = user_followers_count)) +
+  geom_histogram() +
+  geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash") +
+  coord_flip()
+
+coeff %>%
+  ggplot(aes(x = log_followers, y = coefficient)) +
+  geom_point() +
+  geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
+
+coeff %>%
+  ggplot(aes(x = log_followers)) +
+  geom_histogram() +
+  geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
+
 plot(coeff$coefficient, coeff$log_followers)
 
 #
@@ -78,9 +92,6 @@ non_brabant_snippet %>% no_unknown_gender %>%
   ggplot(aes(x = gender, y = coefficient, fill = gender)) +
   geom_violin() +
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
-
-fit <- lm(coefficient ~ log_followers + gender, data=limburg_snippet %>% no_unknown_gender())
-summary(fit)
 
 #
 # Measures
@@ -121,7 +132,7 @@ fanatic_bent_user <- coeff[which.max(coeff$coefficient),]
 # Analysis
 #
 
-fit <- lm(coefficient ~ influence + dialect, data=coeff %>% no_unknown_gender())
+fit <- lm(coefficient ~ dialect + gender, data=coeff %>% no_unknown_gender())
 summary(fit)
 
 posthoc <- emmeans(fit,
@@ -131,6 +142,8 @@ posthoc <- emmeans(fit,
 posthoc$contrasts
 
 ggpredict(fit, "gender") %>% plot
+ggpredict(fit, "log_following") %>% plot
+ggpredict(fit, "distance_from_antwerp") %>% plot
 
 wilcox.test(coefficient ~ gender, data = coeff %>% no_unknown_gender, var.equal=T)
 
