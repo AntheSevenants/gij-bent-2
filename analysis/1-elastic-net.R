@@ -14,7 +14,8 @@ source("0-common.R")
 ds <- dataset(df=df %>% no_unknown_gender(),
               response_variable_column="construction_type",
               to_binary_columns=c("user_id", "dialect"),
-              other_columns=c("distance_from_antwerp", "is_reply", "gender"))
+              other_columns=c("distance_from_antwerp", "is_reply", "gender",
+                              "log_followers", "log_following"))
 
 # Get the list of features
 # In our case, this is the list of users
