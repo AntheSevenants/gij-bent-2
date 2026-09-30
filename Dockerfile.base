@@ -17,5 +17,5 @@ USER rstudio
 RUN R -q -e "install.packages('renv', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -q -e "renv::restore()"
 
-
+USER root
 # This image can now be used to launch an R Studio environment

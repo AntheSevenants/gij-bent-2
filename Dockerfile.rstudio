@@ -19,11 +19,12 @@ RUN R -q -e "install.packages(c('rmarkdown', 'knitr', 'tinytex'), \
 
 RUN R -q -e "library(rmarkdown)"
 
-USER root
 RUN mkdir -p /home/rstudio/gij-bent-2/analysis/ \
-    && mkdir -p /home/rstudio/.local/share/rstudio/projects_settings/ \
-    && mkdir -p /root/.local/share/rstudio/projects_settings/
+    && mkdir -p /home/rstudio/.local/share/rstudio/projects_settings/
+    # && mkdir -p /root/.local/share/rstudio/projects_settings/
 
 RUN echo "setwd('/home/rstudio/gij-bent-2/analysis/')" > /home/rstudio/.Rprofile \
-    && echo "/home/rstudio/gij-bent-2/analysis/gij-bent-2.Rproj" > /home/rstudio/.local/share/rstudio/projects_settings/last-project-path \
-    && echo "/home/rstudio/gij-bent-2/analysis/gij-bent-2.Rproj" > /root/.local/share/rstudio/projects_settings/last-project-path
+    && echo "/home/rstudio/gij-bent-2/analysis/gij-bent-2.Rproj" > /home/rstudio/.local/share/rstudio/projects_settings/last-project-path
+#     && echo "/home/rstudio/gij-bent-2/analysis/gij-bent-2.Rproj" > /root/.local/share/rstudio/projects_settings/last-project-path
+
+USER root
