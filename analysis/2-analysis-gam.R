@@ -11,6 +11,9 @@ library(ggplot2)
 source("0-common.R")
 
 df_solo <- read.csv("../output/gij_bent_coefficients_rich.csv")
+df_solo$direction <- case_when(df_solo$coefficient > 0 ~ "positive",
+                               df_solo$coefficient == 0 ~ "neutral",
+                               df_solo$coefficient < 0 ~ "negative")
 
 #
 # GAM
@@ -130,6 +133,38 @@ predict_coords <- function(df, fit) {
   df_pred$coefficient <- df_pred$fit
   
   return(df_pred)
+}
+
+
+plot_map_normal <- function(df) {
+  ggplot() +
+    theme_map() +
+    geom_sf(data = provinces, ) +
+    geom_jitter(
+      data = df,
+      width = 0.02,
+      height = 0.02,
+      alpha=0.7,
+      aes(
+        x = long,
+        y = lat,
+        colour = coefficient,
+      )
+    ) +
+    scale_color_distiller(palette = "YlGnBu") +
+    facet_wrap(~ direction, ncol= 1,
+               labeller = as_labeller(c(
+                 "negative" = "Conservative deviation",
+                 "neutral"  = "No deviation",
+                 "positive" = "Innovative deviation"
+               ))) + 
+    theme(
+      legend.position = "bottom",
+      legend.direction = "horizontal",
+      legend.justification = "center",
+      legend.title.position = "top", 
+    ) + 
+    guides(colour=guide_legend(title="Indiviudual correction (variation)"))
 }
 
 plot_map <- function(df_pred, gemeenten) {
