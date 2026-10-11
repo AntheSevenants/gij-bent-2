@@ -333,7 +333,7 @@ In general, the control variable results are comparable to the results from @sev
 We still see the expected gender effect, where tweets assumed to come from women have a higher probability of the use of *gij bent*. Compared to @sevenants_zijt_2024, some predictors have more subtle effects. Especially the distance correction and the formality distinction correction are smaller. We assume these differences stem from (i) the coefficient attenuation from the elastic net penalty (ii) a difference in dataset size -- @sevenants_zijt_2024 used only one tweet per user because of issues with random effects, which we sidestep by using elastic net regression (iii) parts of the variation attributed to other predictors in @sevenants_zijt_2024 will now be attributed to individual variation. Still, broadly speaking, the results remain comparable. Therefore, we can safely move on to the discussion of the individual variation.
 
 ```{r #tbl-other-coefficients}
-#| tbl-cap: "Overview of the controlling predictors predictors, their values and whether they were retained by the elastic net regression" 
+#| tbl-cap: "Overview of the controlling predictors, their values and whether they were retained by the elastic net regression" 
 # All other coefficients start with an underscore
 other_coefficients <- coefficients_full[coefficients_full$feature %>% substr(1,1) == "_",]
 # Change "removed" to "retained"
@@ -358,8 +358,9 @@ other_coefficients <- other_coefficients[order(other_coefficients$coefficient,
                                                decreasing=TRUE),]
 # Remove row indices
 rownames(other_coefficients) <- NULL
-# Output to document
-other_coefficients
+
+# Only show the non log
+other_coefficients[!grepl("^log", other_coefficients$predictor), ]
 ```
 
 ### Individual variation
@@ -463,14 +464,7 @@ coefficients %>%
   geom_hline(yintercept=0, color="black", linewidth=1, linetype="dotdash")
 ```
 
-We see in @fig-region-violin that, while they are few, innovators in non-Brabant dialect areas *do* exist. One might wonder what the profile of these rare innovators is. Perhaps they live close to the border in their specific dialect regions, and are therefore "atypically" innovative for their region. To answer this question, we built a Generalised Additive Model or GAM [@hastie_generalized_1987]. A GAM can fit smooth curves to "wavy" data. If extrapolated to two dimensions, it allows one to create "weatherman-like" heatmaps for linguistic data. In this case, we modelled the elastic net coefficients on the basis of the latitude and longitude values associated with the places in the profiles of the Twitter users, in addition to the interaction of the two axes ("tensor smooth", $te$). This gives rise to the following equation:
-
-$$
-\text{construction} \sim s(\text{longitude}) + s(\text{latitude}) + te(\text{longitude}, \text{latitude})
-$$
-
-
-We will immediately shift towards the visual interpretation of the GAM in @fig-gam. Dark blue colours show corrections towards the conservative variant, whereas light yellow colours show corrections towards the innovative variant. Beware to keep in mind, however, that these corrections are to be interpreted against the expected behaviour in that specific dialect region. In the GAM plot, we see that the northern Antwerp region is specifically innovative in contrast to an already innovative dialect region, Brabant. This is expected from the results by @sevenants_zijt_2024. What is especially interesting given our interest in the innovators in the non-Brabant regions, is that we indeed see that areas closer to the Brabant border show corrections that tend more towards the innovative variant. In addition, we also see that there seems to be an additional horizontal diffusion pattern, where the more innovative variant seems to spread from east to west in the east and from west to east in the west. This pattern remained invisible in the original study. Computer simulations have shown that border-adjacent speakers can play an important role as gatekeepers of innovations, since their hybrid identity can form a "bridge" through which innovations can be passed on [@sevenants_neighbours_2021]. In a sense, the horizontal positive variation coefficient pattern shows the pathway that *gij bent* might take in the future in order to break through in these other dialect regions. Note that the correction coefficients for the West-Vlaanderen province (in the west) and the Voeren municipality (the isolated municipality in the southeast) are unreliable because of data scarcity.
+We see in @fig-region-violin that, while they are few, innovators in non-Brabant dialect areas *do* exist. One might wonder what the profile of these rare innovators is. Perhaps they live close to the border in their specific dialect regions, and are therefore "atypically" innovative for their region. To answer this question, we plotted the locations of the language users on three maps, depending on their linguistic profiles. @fig-maps shows the spread of conservators (top) and innovators (bottom), and also of language users whose language did not deviate starkly from expectations (middle). We see that innovative profiles are indeed more likely to be found in the Brabant dialect region, as was clear from @fig-region-violin. We also see that conservative profiles appear more in the other dialect regions, but that same Brabant dialect region also cleary shows enough conservative profiles. What is especially interesting given our interest in the innovators in the non-Brabant regions, is that we indeed see that areas closer to the Brabant border show corrections that tend more towards the innovative variant. This pattern remained invisible in the original study. Computer simulations have shown that border-adjacent speakers can play an important role as gatekeepers of innovations, since their hybrid identity can form a "bridge" through which innovations can be passed on [@sevenants_neighbours_2021], so perhaps this "border profile" could be key in further diffusion of the variant. At the same time, we have to keep in mind that these corrections can also be partially explained on the basis of our discrete dialect borders.
 
 ```{r gam-load}
 #| echo: false
@@ -479,51 +473,53 @@ setwd("../analysis/")
 source("2-analysis-gam.R")
 ```
 
-```{r #fig-gam}
+```{r #fig-maps}
 #| echo: false
-#| fig-width: 7
-#| fig-height: 5
-#| fig-cap: A map showing the individual variation correction per municipality. Darker colours signify negative corrections (more conservative), lighter colours signify positive corrections (more innovative).
-df_to_plot(df_solo)
+#| fig-width: 5
+#| fig-height: 7
+#| fig-cap: Three maps showing the individual variation correction per language user, split across correction direction. Darker colours signify negative corrections (more conservative), lighter colours signify positive corrections (more innovative).
+plot_map_normal(df_solo)
 ```
-
-In general, then, we see that there are two trends in the variation coefficients. Firstly, for gender, we see a "reversal" pattern, where typical behaviour is not shared across the entire gender group. Secondly, we see a wave-like [@francois_trees_2014] horizontal diffusion pattern in the non-Brabant dialect regions, even in regions which, in the general analysis, are thought to be rather conservative. Though speakers are of course free to use whatever forms they want, how they deviate from expectations is not random. 
 
 #### Network effects {#sec-regression}
 
-As mentioned in @sec-introduction, the networked aspect of social media data provides an opportunity for researchers to investigate which people use what variant, and what that says about the diffusion of a new variant. Since our dataset comes from the Twitter platform, we also dispose of metrics which define a user's relative popularity on the platform. The first metric, "Followers", tallies how many other users want to see a user's posts appear in their own social media feed. Users with a large number of followers have a broad reach, and therefore have the possibility to be influential in their language use. The second metric, "Following", states how many other people's posts a user wants to see in their social media feed. Users who follow a large number of other users have the opportunity of being exposed to a larger linguistic pallette, though this need not necessarily be the case.
+As mentioned in @sec-introduction, the networked aspect of social media data provides an opportunity for researchers to investigate which people use what variant, and what that says about the diffusion of a new variant. Since our dataset comes from the Twitter platform, we also dispose of metrics which define a user's relative popularity on the platform. The first metric, "Followers", tallies how many other users want to see a user's posts appear in their own social media feed. Users with a large number of followers have a broad reach, and therefore have the possibility to be influential in their language use. The second metric, "Following", states how many other people's posts a user wants to see in their social media feed. Users who follow a large number of other users have the opportunity of being exposed to a larger linguistic pallette, though this need not necessarily be the case
 
-To assess the influence of the users in our dataset within the larger Twitter network, we devised a metric which is based on the ratio between "Followers" and "Following". The idea of the metric is that users who have a large number of followers, yet follow few people themselves, have a larger relative influence than users without this asymmetry. Our influence metric is shown in the following equation:
-
-$$
-\log{
-  \frac{
-    \text{\# followers} + 0.001
-  } {
-    \text{\# following} + 0.001
-  }
-}
-$$
-
-Our influence metric is based on the priming ratio from @sevenants_investigating_2024 and hinges on logarithm and Laplace smoothing [@brysbaert_dealing_2013]. The logarithm is a key operation in order to compress the wide numeric range found in follower and following counts. Where some users have thousands of followers, some only have a few. The use of the logarithm scales this discrepancy down. In addition, we use Laplace smoothing in order to avoid division by zero, in the event that users do not follow other users. The mean influence value among our speakers is `r coefficients$influence %>% mean() %>% formatd()` (median `r coefficients$influence %>% median() %>% formatd()`). The boxplot in @fig-influence-boxplot shows that our dataset generally consists of more influential figures, i.e. users who have more followers than they themselves follow people. This is expected, since broadly speaking, 90% of social media users only read, but never post themselves [@nielsen_participation_2006; related to the Pareto Principle: @sanders_pareto_1987]. Since our dataset consists of posts, it makes sense that our dataset mainly engages with the other 10%, the active users.
+The mean "Followers" count among our speakers is `r coefficients$user_followers_count %>% mean() %>% formatn()` (median `r coefficients$user_followers_count %>% median() %>% formatn()`). The mean "Following" count among our speakers is `r coefficients$user_friends_count %>% mean() %>% formatn()` (median `r coefficients$user_friends_count %>% median() %>% formatn()`). The boxplot in @fig-influence-boxplot (left) shows that our dataset displays great variability. Some users have magnitudes more followers, while others follow a great many more people than others. In order to correctly handle this wide array of variation, we chose to apply the natural logarithm to both metrics. @fig-influence-boxplot (right) shows that this operation indeed compresses the variation.
 
 ```{r #fig-influence-boxplot}
-#| fig-cap: The distribution of the influence metric in our dataset. The bulk of our tweet authors are followed more than they follow others themselves.
+#| fig-cap: The distribution of the "Followers" and "Following" metrics in our dataset. The bulk of our tweet authors are followed more than they follow others themselves.
 
-boxplot(coefficients$influence, horizontal = T)
+plot_data <- list(
+    Followers = coefficients$user_followers_count, 
+    Following = coefficients$user_friends_count
+)
+
+log_plot_data <- list(
+    Followers = coefficients$log_followers, 
+    Following = coefficients$log_following
+)
+# 2. Set up the plotting area: 2 rows, 1 column
+par(mfrow = c(1, 2), mar = c(2, 3, 2, 2))
+
+# Plot them together
+boxplot(plot_data, horizontal = FALSE, main="Regular scale")
+boxplot(log_plot_data, horizontal = FALSE, main="Log scale")
+
+# Reset
+par(mfrow = c(1, 1))
 ```
 
-In our case, we want to know how the language users who are thought to be influential in our network behave. Are they at the forefront of innovation, or are they conservative? Depending on what profile we find, we might be able to discern in what phase of diffusion the *gij bent* innovation is situated.
+We included "Log Followers" and "Log Following" as predictors in our elastic net regression. @tbl-network-results shows the coefficient values. The same reference situation from @sec-controlling-predictors applies.
 
-To answer this question, we built a linear regression model. We model the coefficients in terms of the influence of the users, but we also supplement our analysis with the dialect and gender distinctions we discussed earlier. Bundling all these possible influences in the same model will ensure that we do not accidentally assign variation between language users to the wrong source. It will also function as an extra check for the results from @sec-group-variation, as we will now be able to check statistically whether the distinctions we spotted in the visual exploration are statistically significant distinctions. @tbl-linear-predictors gives an overview of the predictors that were used in the linear regression model. @tbl-linear-regression-results shows the model results.
+```{r #tbl-network-results}
+#| tbl-cap: "Overview of the network predictors, their values and whether they were retained by the elastic net regression" 
+# Only show the log
+other_coefficients[grepl("^log", other_coefficients$predictor), ]
+```
 
-|predictor|explanation|
-|---|---|
-|dialect|the dialect area the tweet poster belongs to ("West Flemish", "East Flemish", "Brabantian", "Limburgish")
-|gender|the estimated gender of the tweet poster -- generated automatically|
-|influence|a metric expressing the relative influence of a language user within the Twitter network|
-
-: An overview of all predictors used in the linear regression model. {#tbl-linear-predictors}
+TODO hier netwerkinterpretatie
+hieronder staat nog het oude, dat kan straks weg denk ik
 
 ```{r #tbl-linear-regression-results}
 #| tbl-cap: "Results of the linear regression analysis. * indicates statistical significance"
