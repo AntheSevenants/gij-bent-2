@@ -483,6 +483,48 @@ source("2-analysis-gam.R")
 plot_map_normal(df_solo)
 ```
 
+##### Statistical interpretation of individual differences
+
+In this section, we check whether our intuitions from the previous two subsections hold statistically. Is the distribution of individual variation corrections predictable? We specifically want to know (1) whether the individual variation between male and female posters differs significantly (2) whether there is a unique Brabant-correction profile. To answer these questions, we built a linear regression model. We model the individual variation coefficients in terms of the dialect and gender distinctions we discussed earlier. @tbl-linear-regression-results shows the model results.
+
+
+```{r #tbl-linear-regression-results}
+#| tbl-cap: "Results of the linear regression analysis. * indicates statistical significance"
+fit <- lm(coefficient ~ gender + dialect, data=coefficients %>% no_unknown_gender())
+coefficients_lm_df <- fit %>% format_table()
+
+coefficients_lm_df$term <- gsub("(gender_)", "", coefficients_lm_df$term)
+coefficients_lm_df$term <- gsub("(_is_dialect_)", "", coefficients_lm_df$term)
+
+coefficients_lm_df
+```
+
+First, we look at the intercept of the model. Just like in @sec-controlling-predictors, the intercept here expresses the "default" situation against which further corrections need to be understood. Here, the intercept expresses a language user ...
+
+- ... from the Brabant dialect area
+- ... who is assumed to be male
+
+Our intercept starts from a value of `r fit %>% tidy %>% filter(term == "(Intercept)") %>% .$estimate %>% formatd(3)`, which shows a bias for innovative correction. All further corrections need to be understood relative to this value.
+
+Further, we see in @tbl-linear-regression-results that the distinction between users who are thought to be male and users who are thought to be female does not reach the significance threshold. Therefore, the differences which we discussed in @sec-group-variation are not sufficiently large to constitute distinct patterns. The results in @fig-gender-violin and @tbl-linear-regression-results are based on the same elastic net coefficients: @fig-gender-violin visualises the individual corrections to the general pattern, while @tbl-linear-regression-results tests whether these corrections differ systematically between groups. The negative coefficient for female authors in @tbl-linear-regression-results should therefore be interpreted as a tendency for female authors to make more conservative corrections to the general pattern, rather than as evidence that women are generally more conservative than men in their use of *gij bent*. This is consistent with the pattern shown in @fig-gender-violin, although the difference is not statistically significant.
+
+Finally, we see that there are significant differences between the reference dialect area (Brabant) and all other dialect areas. As was already clear from the visual inspection of the corrections per dialect area, we see that in non-Brabant areas, the corrections tend towards the conservative form, whereas Brabant area corrections are mostly innovative.
+
+In addition, we want to know whether there are also differences *between* the non-Brabant dialact areas. To investigate this, we ran a post-hoc analysis through `emmeans` [@emmeans]. In this post-hoc analysis, we check for each dialect area pair whether there are significant differences in individual variation between the two. We see in @tbl-posthoc-test that there are *no* further differences between the non-Brabant dialect areas. Our assessment of the two variation profiles was thus correct.
+
+```{r tbl-posthoc-test}
+#| tbl-cap: Results of the `emmeans` posthoc analysis for dialect area. * indicates statistical significance
+posthoc <- emmeans(fit,
+                   pairwise ~ dialect,
+                   type="response",
+                   weights="proportional")
+
+posthoc_df <- posthoc %>% format_posthoc_table()
+posthoc_df$contrast <- gsub("(_is_dialect_)", "", posthoc_df$contrast)
+
+posthoc_df
+```
+
 #### Network effects {#sec-regression}
 
 As mentioned in @sec-introduction, the networked aspect of social media data provides an opportunity for researchers to investigate which people use what variant, and what that says about the diffusion of a new variant. Since our dataset comes from the Twitter platform, we also dispose of metrics which define a user's relative popularity on the platform. The first metric, "Followers", tallies how many other users want to see a user's posts appear in their own social media feed. Users with a large number of followers have a broad reach, and therefore have the possibility to be influential in their language use. The second metric, "Following", states how many other people's posts a user wants to see in their social media feed. Users who follow a large number of other users have the opportunity of being exposed to a larger linguistic pallette, though this need not necessarily be the case
@@ -520,150 +562,9 @@ We included "Log Followers" and "Log Following" as predictors in our elastic net
 other_coefficients[grepl("^log", other_coefficients$predictor), ]
 ```
 
-TODO hier netwerkinterpretatie
-hieronder staat nog het oude, dat kan straks weg denk ik
-
 The number of followers was retained by the elastic net model, with a negative coefficient, whereas the number of accounts followed was shrunk to zero. This suggests that audience size is more informative for explaining individual variation in *gij bent* and *gij zijt* than the number of accounts users themselves follow. The negative coefficient indicates that users with more followers tend to show more conservative corrections.
 
 Previous research has shown that social-network structure can affect both the diffusion of linguistic innovations and the maintenance of existing norms. @milroy_linguistic_1985 argue that close-knit social networks can reinforce established linguistic norms and constrain innovation. More recently, @tarrade_how_2024 showed that the network positions of adopters are associated with the eventual success of lexical innovations on Twitter: innovations that become established reach more central and prestigious users during their propagation. From a complementary perspective, @ari_talking_2017 found that individuals with smaller social networks were more susceptible to new linguistic input, while computational simulations showed that this greater malleability could facilitate the diffusion of innovations [@fagyal_centers_2010]. Together, these studies suggest that network characteristics may influence both the adoption of innovations and the persistence of established forms. This provides a possible context for our finding that users with more followers tended to make more conservative corrections. Comparatively, the conservative form *gij zijt* remains more established than innovative *gij bent*, the diffusion of which is limited to the central Brabant dialect region. In this light, online dicussions show that *gij bent* is criticised by certain language users as "cringe", "weird", "wholly incorrect" or even "horrible tussentaal" [@reddit_gij_bent_2021]. It is therefore possible that users with larger audiences are more likely to favour the established form, particularly when the innovative variant carries negative social evaluations. This is also consistent with network research suggesting that more central individuals may be less likely to initiate systemic change because their connections to other nodes buffer them against change, whereas innovations are more likely to originate at the network periphery, where resistance is weaker [@van_de_leemput_transformation_2024].
-
-```{r #tbl-linear-regression-results}
-#| tbl-cap: "Results of the linear regression analysis. * indicates statistical significance"
-fit <- lm(coefficient ~ gender + dialect + influence, data=coefficients %>% no_unknown_gender())
-coefficients_lm_df <- fit %>% format_table()
-
-coefficients_lm_df$term <- gsub("(gender_)", "", coefficients_lm_df$term)
-coefficients_lm_df$term <- gsub("(_is_dialect_)", "", coefficients_lm_df$term)
-
-coefficients_lm_df
-```
-
-We will first go over the controlling variables we discussed earlier, and then move on to the influence predictor.
-
-##### Intercept
-
-First, we look at the intercept of the model. Just like in @sec-controlling-predictors, the intercept here expressed the "default" situation against which further corrections need to be understood. Here, the intercept expresses a language user ...
-
-- ... from the Brabant dialect area
-- ... who is assumed to be male
-- ... with an influence of "zero"
-
-Our intercept starts from a value of `r fit %>% tidy %>% filter(term == "(Intercept)") %>% .$estimate %>% formatd(3)`, which shows a slight bias for innovative correction. All further corrections need to be understood relative to this value.
-
-##### Gender
-
-We see that the distinction between users who are thought to be male and users who are thought to be female does not reach the significance threshold. Therefore, the differences which we discussed in @sec-group-variation are not sufficiently large to constitute distinct patterns. The results in Figure 2 and Table 4 are based on the same elastic-net coefficients: Figure 2 visualizes the individual corrections to the general pattern, while Table 4 tests whether these corrections differ systematically between groups. The negative coefficient for female authors in Table 4 should therefore be interpreted as a tendency for female authors to make more conservative corrections to the general pattern, rather than as evidence that women are generally more conservative than men in their use of *gij bent*. This is consistent with the pattern shown in Figure 2, although the difference is not statistically significant. The results thus provide evidence for a tendency towards individual behaviour that can run counter to the general trend, without indicating a distinct gender-specific pattern.
-
-##### Dialect area
-
-Next, we also see that there are significant differences between the reference dialect area (Brabant) and all other dialect areas. As was already clear from the visual inspection of the corrections per dialect area, we see that in non-Brabant areas, the corrections tend towards the conservative form, whereas Brabant area corrections are mostly innovative.
-
-In addition, we wanted to know whether there are also differences *between* the non-Brabant dialact areas. To investigate this, we ran a post-hoc analysis through `emmeans` [@emmeans]. In this post-hoc analysis, we check for each dialect area pair whether there are significant differences in individual variation between the two. We see in @tbl-posthoc-test that there are *no* further differences between the non-Brabant dialect areas. Our assessment of the two variation profiles was thus correct.
-
-```{r tbl-posthoc-test}
-#| tbl-cap: Results of the `emmeans` posthoc analysis for dialect area. * indicates statistical significance
-posthoc <- emmeans(fit,
-                   pairwise ~ dialect,
-                   type="response",
-                   weights="proportional")
-
-posthoc_df <- posthoc %>% format_posthoc_table()
-posthoc_df$contrast <- gsub("(_is_dialect_)", "", posthoc_df$contrast)
-
-posthoc_df
-```
-
-##### Network influence
-
-Finally, we look at the network influence parameter. Recall that our influence predictor expresses the (im)balance between the "followers" and "following" metrics, with those users who are followed by more people than they follow themselves being attributed a larger influence. The regression table in @tbl-linear-predictors shows that, as our influence metric increases, so does the probability for the use of *gij bent*. This means that the more influential a speaker is in the Twitter network, the more likely they are to use the new, innovative *gij bent* form. In other words: the innovative *gij bent* form is not confined to peripheral innovators, but is actively promoted by more central and prestigious figures in the Twitter network. This finding aligns with network-based theories of diffusion, in which highly connected early adopters play a crucial role in amplifying and legitimising innovations [@rogers_diffusion_2003: 282-283]. It also indicates that *gij bent* may have progressed beyond the initial stage of peripheral innovation, i.e. the stage in which the innovators are crucial, entering a phase in which socially visible and influential users help to normalize the form.
-
-The observed synchronic variation can also be interpreted through the framework of binary language change, where a new variant, *gij bent*, competes with an older one, *gij zijt*. Such binary changes are typically modelled using an S-curve [@speelman_logistic_2014], which plots the cumulative adoption of the innovation over time. This S-curve has a bell-shaped counterpart, which does not capture the cumulative adoption, but instead captures the rate of adoption at any given point in time: few individuals adopt at the very beginning, adoption peaks as the innovation gains momentum, and then levels off once most speakers have shifted.
-
-Diffusion research has shown that the individuals driving the diffusion process can be categorized into five adopter groups, defined mathematically by standard deviations around the mean adoption time [@rogers_diffusion_2003: 281]: innovators, early adopters, early majority, late majority, and laggards (see @fig-adopter-categories). As already hinted at in @sec-introduction, each of these categories is embedded in the network in a different way. Innovators, positioned at the periphery and connected through weak ties, acquire innovations from outside their immediate community and initiate change. Early adopters, in contrast, are more centrally embedded and exert strong influence through their many strong ties, thereby accelerating diffusion and granting legitimacy to the innovation [@rogers_diffusion_2003: 281]. Our finding that more influential Twitter users are more likely to employ *gij bent* suggests that this form has moved beyond the initial innovator stage and is now being amplified by early adopters. In this way, we can infer in which stage of the S-curve the change is situated: between the second and the first standard deviation before the mean.
-
-
-```{r fig-adopter-categories}
-#| echo: FALSE
-#| fig-width: 7
-#| fig-height: 7
-#| fig-cap: S-curve showing the cumulative adoption or diffusion of an innovation. The bell curve is its derivative and shows the adoption rate over time. For *gij bent*, we are assumed to currently be in the "Early adopters" phase.
-
-# Rescale time to 0–100
-time <- seq(0, 20, 0.1)
-time_rescaled <- time * 5   # 0–100
-
-# Logistic S-curve (cumulative adoption)
-s_curve <- 100 / (1 + exp(-0.6 * (time - 10)))
-
-# Bell curve (adoption rate, derivative of logistic)
-bell_curve <- dnorm(time, mean = 10, sd = 2.5) * 100
-
-# Combine into dataframe with rescaled x
-df <- data.frame(time = time_rescaled, s_curve, bell_curve)
-
-# Build cutoff bands instead of single lines
-bands <- data.frame(
-  xmin = c(0, 
-           14, 
-           32, 
-           50, 
-           68),
-  xmax = c(14, 
-           32, 
-           50, 
-           68, 
-           100),
-  label = c("Innovators", "Early adopters", "Early majority", 
-            "Late majority", "Laggards"),
-  fill = c("red", "orange", "yellow", "darkgreen", "blue")
-)
-
-# Ensure correct order
-bands$label <- factor(
-  bands$label,
-  levels = c("Innovators", "Early adopters", "Early majority", "Late majority", "Laggards")
-)
-
-# Plot with bands
-ggplot(df, aes(x = time)) +
-  # bands (slightly transparent so curves still visible)
-  geom_rect(data = bands, aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf, fill = label),
-            alpha = 0.1, inherit.aes = FALSE) +
-  
-  geom_line(aes(y = s_curve, colour = "S-curve (cumulative adoption)"), linewidth = 1) +
-  geom_line(aes(y = bell_curve, colour = "Bell curve (adoption rate)"), linewidth = 1, linetype = "dashed") +
-  # label
-  annotate("text", x = 22.75, y = 52, label = "Now",
-           colour = "#7f6c4c", hjust = 0.5) +
-  scale_fill_manual(
-    name = "Adopter categories",
-    values = c("Innovators" = "red",
-               "Early adopters" = "orange",
-               "Early majority" = "yellow",
-               "Late majority" = "darkgreen",
-               "Laggards" = "blue")
-  ) +
-  scale_colour_manual(
-  name = "",
-  values = c("S-curve (cumulative adoption)" = "purple",
-             "Bell curve (adoption rate)" = "deeppink"),
-  limits = c("S-curve (cumulative adoption)",
-             "Bell curve (adoption rate)")) +  # enforce order
-  labs(
-    x = "Time",
-    y = "Adoption"
-  ) +
-  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
-  theme_minimal(base_size = 14) +
-  theme(
-    legend.position = "bottom",
-    legend.box = "vertical"
-  ) +
-  guides(
-    colour = guide_legend(nrow = 1),  # lines legend
-    fill   = guide_legend(nrow = 2)   # bands legend
-  )
-```
 
 ## Discussion
 
