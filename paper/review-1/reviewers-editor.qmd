@@ -1,0 +1,92 @@
+---
+title: "Response to reviewers and editor"
+format:
+  html:
+    toc: false
+    reference-location: margin
+  latex:
+    theme: default
+    standalone: true
+    cite-method: biblatex
+    filters: []
+    documentclass: article
+    toc: false
+    reference-location: document
+    wrap: none
+    hyperrefoptions:
+      - hidelinks=true
+      - colorlinks=false
+    no-highlight: true
+    variables:
+      tight-list: false
+    tbl-cap-location: top
+    template: template.tex
+editor: source
+title-block-banner: true
+bibliography: ../references.bib
+tbl-cap-location: bottom
+fig-cap-location: bottom
+number-sections: true
+csl: ../chicago-author-date.csl
+df-print: kable
+execute:
+  echo: false
+---
+
+Dear editor and reviewers,
+
+First, we would like to thank everyone for the elaborate feedback on our manuscript. We agree that there were several areas our work could be improved in. We worked on improving these aspects of the manuscript and analysis. We would like to address the concerns by reviewer 1 and reviewer 2 jointly. To make it more clear which parts of the manuscript have been changed, we have highlighted all new or adapted parts of the text in blue.
+
+## More elaborate dicussion of individual variation
+
+We were asked to provide more context about individual variation. We tackled this in several stages. First of all, we added a discussion on what (little) is currently known about individual variation, and why individual variation has rarely been involved in linguistic analysis up until now. For this, we take a historical perspective. In addition, we discuss the limitations that current research into individual variation has faced, and how our study attempts to overcome some of these issues (which is through a combination of more elaborate data, and a more advanced statistical technique). Finally, we also discuss what it "means" to describe individual variation. This is a result of several conversations we, the authors, had during the revision of this article. Generally speaking, we think the two ways to operationalise individual variation studies are either maximally (individual variation is the absolute language behaviour of a speaker) or minimally (individual variation is how a speaker deviates from macroscopic expectations). For this article, we chose the minimalist interpretation, especially given the audience of the journal, and the synchronous sociolinguistic context. In a diachronic context, it might be more useful to take the other perspective (absolute behaviour, offset against time). We forego the synchronic-diachronic discussion in the article itself for the sake of clarity for the intended audience, but we feel like there is more to this distinction. Perhaps this can be an expansion for future work.
+
+## Clearer research questions
+
+In the previous version of our article, it was felt that our research questions were much too broad, and did not correspond well to the discussion. We adapted the research questions to specifically address concrete research questions relevant for linguists interested in sociolinguistic variation, and we also assess to what extent we were successful in answering these questions in the discussion.
+
+1. To what extent does an individual-level analysis reveal variation that is obscured by aggregate patterns of linguistic variation?
+2. What can social media network structure tell us about the choice between constructions?
+
+Note that we no longer attempt to predict the future diffusion of the innovative variant with individual variation, since we deem this to be too speculative.
+
+## Discussion of sociolinguistic context in Flanders needs to be more nuanced
+
+We received comments that our discussion of the sociolinguistic context in Flanders lacked nuance. In this light, we have refined our discussion of the evolution from diglossia to diaglossia and nuanced the "Brabant expansion". In addition, we toned down the "generality" of the use of the pronoun *gij* and discussed the alternative pronouns and its associated conjugations of *zijn*. 
+
+## Clearer description of the dataset
+
+Our presentation of the dataset lacked some details about how the dataset was put together. We have added clarifications where needed, and most importantly we now also explicitly mention *all* the forms that were included in the original search query on Twitter (i.e. including inversion, spelling alternations, etc.). This should also help with some of the worries that our dataset might not be representative if these variations were missing. One reviewer mentioned the possible influence of word order, and this is indeed something we looked at in a previous stage of the study. Unfortunately, word order variation is not frequent enough in social media data, and we were unable to operationalise this in the dataset.
+
+Note that our dataset still does not include *jij* forms or other non-*gij* forms, but this is by design. The inclusion of all these forms would complicate the analysis considerably, and is, after all, not all that relevant to the competition between *gij zijt* and *gij bent*.
+
+## Difference between elastic net regression and random intercepts and random slopes
+
+One of the reviewers wondered what the added benefit of elastic net regression is for this type of research, especially given the existence of random intercepts in mixed effects logistic regression. We now discuss the limitations of random intercepts, and also highlight the conceptual mismatch between random intercepts and individual variation. As a result, our methodology section has expanded. We are aware that one of the reviewers preferred the methodology section move to the appendix. Though we feel that the distinction between both techniques is relevant to potential readers, who will likely already be using mixed effects logistic regression, we would like to involve the editor for their perspective.
+
+## Better explanation of what the elastic net coefficients mean
+
+There was some confusion about what the elastic net coefficients assigned to tweet authors actually stand for. We now very thoroughly define these as quantifications of "how each language user deviates from what is expected given their gender, location". We make this more clear in the following subsections, where we analyse these deviations according to gender and dialect region. We also make more clear that we run the linear regression at the end to make sure the patterns we see in the individual variation *itself* are supported statistically.
+
+## Low reliability of the GAM
+
+We received several remarks about our GAM. There were concerns that we overgeneralised the data we had, and that some of our conclusions were much too reliant on this overgeneralising GAM. We agree with all of these concerns, and therefore decided to do away with the GAM entirely. Instead, we now split the individual authors into three categories: more conservative, more innovative, and neutral. We plot the locations of these authors on the map to get an idea of where the three profile types can be found. In this way, the spread of the language users is instantly visible. The insights we found are mostly comparable.
+
+## Follower-following metric adapted
+
+There were some reservations about our influence metric (ratio *followers*/*following*) and what it captured. We have decided to forego our metric entirely and focus on the *followers* and *following* directly and separately. We have also put these metrics in the main elastic net regression rather than in the post-hoc analysis, in order to be sure of the validity of these predictors. As a result, we can now talk about the difference between "audience size" (followers) and "exposure size" (following). We found that users with large audiences are more likely to be conservative and thus conforming to the older forms, and we have adapted our discussion accordingly.
+
+We no longer attempt to make any predictions about the future diffusion of *gij bent*. Indeed, we agree that we did not have strong enough evidence for these claims.
+
+## Other changes
+
+In addition, we ...
+
+* ... better defined the meaning of the "A-curve", and its consequences for language research;
+* ... explained the difference between ride and lasso regression, and discussed their respective strengths;
+* ... more accurately described the "fixed", non-author effects in the elastic net regression.
+
+We again would like to thank both the editor and the reviewers for their helpful comments. We hope our changes are satisfactory.
+
+All the best,  
+The authors
