@@ -164,7 +164,7 @@ plot_map_normal <- function(df) {
       legend.justification = "center",
       legend.title.position = "top", 
     ) + 
-    guides(colour=guide_legend(title="Indiviudual correction (variation)"))
+    guides(colour=guide_legend(title="Individual correction (variation)"))
 }
 
 plot_map <- function(df_pred, gemeenten) {
