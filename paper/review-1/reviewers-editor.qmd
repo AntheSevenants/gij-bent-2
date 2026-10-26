@@ -20,7 +20,7 @@ format:
     variables:
       tight-list: false
     tbl-cap-location: top
-    template: template.tex
+    template: ../template.tex
 editor: source
 title-block-banner: true
 bibliography: ../references.bib
@@ -35,7 +35,7 @@ execute:
 
 Dear editor and reviewers,
 
-First, we would like to thank everyone for the elaborate feedback on our manuscript. We agree that there were several areas our work could be improved in. We worked on improving these aspects of the manuscript and analysis. We would like to address the concerns by reviewer 1 and reviewer 2 jointly. To make it more clear which parts of the manuscript have been changed, we have highlighted all new or adapted parts of the text in blue.
+First, we would like to thank everyone for the elaborate feedback on our manuscript. We agree that there were several areas our work could be improved in, and worked on improving these aspects of the manuscript and analysis. We would like to address the concerns by reviewer 1 and reviewer 2 jointly. To make it more clear which parts of the manuscript have been changed, we have highlighted all new or adapted parts of the text in blue.
 
 ## More elaborate dicussion of individual variation
 
