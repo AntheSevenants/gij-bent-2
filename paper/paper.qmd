@@ -546,7 +546,7 @@ log_plot_data <- list(
     Following = coefficients$log_following
 )
 # 2. Set up the plotting area: 2 rows, 1 column
-par(mfrow = c(1, 2), mar = c(2, 3, 2, 2))
+par(mfrow = c(1, 2), mar = c(2, 3, 2, 2), cex = 0.8)
 
 # Plot them together
 boxplot(plot_data, horizontal = FALSE, main="Regular scale")
