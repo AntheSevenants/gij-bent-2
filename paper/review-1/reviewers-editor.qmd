@@ -46,7 +46,7 @@ We were asked to provide more context about individual variation. We tackled thi
 In the previous version of our article, it was felt that our research questions were much too broad, and did not correspond well to the discussion. We adapted the research questions to specifically address concrete research questions relevant for linguists interested in sociolinguistic variation, and we also assess to what extent we were successful in answering these questions in the discussion.
 
 1. To what extent does an individual-level analysis reveal variation that is obscured by aggregate patterns of linguistic variation?
-2. What can social media network structure tell us about the choice between constructions?
+2. What can social media network structure tell us about the choice between two constructions?
 
 Note that we no longer attempt to predict the future diffusion of the innovative variant with individual variation, since we deem this to be too speculative.
 
